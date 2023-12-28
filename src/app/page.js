@@ -1,11 +1,13 @@
 import React from 'react';
 import styles from './page.module.css';
 import HomePage from './pages/Homepage';
+import Header from './pages/Header';
 
 export default function Home() {
   return (
     <main className={styles.main}>
-      <HomePage/>
+      <Header className="header" />
+      <HomePage className="homepage"/>
     </main>
   );
 }
