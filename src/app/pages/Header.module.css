@@ -2,7 +2,7 @@
     display: flex;
     justify-content: space-between; 
     align-items: center;
-
+    margin-bottom: 2rem;
   }
   
   .headerLinks {
@@ -13,7 +13,8 @@
   }
   
   .headerLink {
-    padding: 10px 20px;
+    padding: 10px 40px;
+    margin: 0px;
     text-decoration: none;
     color: #333;
     margin-right: 10px;

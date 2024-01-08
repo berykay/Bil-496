@@ -4,11 +4,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  min-height: 100vh;
-}
-
-.header {
-  color:green;
+  margin: 1rem;
 }
 
 .center {

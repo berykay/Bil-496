@@ -6,8 +6,8 @@ import Header from './pages/Header';
 export default function Home() {
   return (
     <main className={styles.main}>
-      <Header className={styles.header} />
-      <HomePage className="homepage"/>
+      <Header/>
+      <HomePage/>
     </main>
   );
 }
