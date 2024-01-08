@@ -1,8 +1,8 @@
 import One from "../components/One";
 
-export default function Homepage(props ) {
+export default function Homepage() {
   return (
-    <div div className={props.className}>
+    <div>
       <One />
     </div>
   );

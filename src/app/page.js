@@ -6,7 +6,7 @@ import Header from './pages/Header';
 export default function Home() {
   return (
     <main className={styles.main}>
-      <Header className="header" />
+      <Header className={styles.header} />
       <HomePage className="homepage"/>
     </main>
   );
