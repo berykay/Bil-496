@@ -1,10 +1,9 @@
-import One from "../components/One";
+import ChatgptAPI from "../components/ChatgptAPI";
 
 export default function Homepage() {
   return (
     <div>
-      <p>sadfads</p> 
-      <One />
+      <ChatgptAPI />
     </div>
   );
 }
