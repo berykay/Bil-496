@@ -1,25 +1,10 @@
 'use client'
 
-import { useState,useEffect  } from 'react'
-import axios from 'axios';
+import { useState } from 'react';
 
 const ChatgptAPI = () => {
   const [userInput, setUserInput] = useState('');
   const [generatedText, setGeneratedText] = useState('');
-
-  useEffect(() => {
-    // Bu useEffect içinde, DOM manipülasyonu yaparak "className" uyumsuzluğunu engellemeye çalışabilirsiniz.
-    // Örnek olarak, bir süre bekleyerek useEffect'in işini tamamlamasını ve DOM'un güncellenmesini sağlayabilirsiniz.
-    const timer = setTimeout(() => {
-      // Örnek bir DOM manipülasyonu:
-      const elements = document.querySelectorAll('.__className_e66fe9');
-      elements.forEach((element) => {
-        element.classList.remove('vsc-initialized');
-      });
-    }, 100);
-    return () => clearTimeout(timer); // useEffect temizliği
-  }, []);
-
 
   const handleInputChange = (e) => {
     setUserInput(e.target.value);
@@ -27,27 +12,38 @@ const ChatgptAPI = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(
-        'https://api.openai.com/v1/engines/davinci/completions',
-        {
-          prompt: userInput,
-          max_tokens: 50,
-          n: 1,
-          stop: '\n',
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
+
+    const userMessage = userInput;
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`, // API anahtarınızı buraya ekleyin
+      },
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a helpful assistant.'
           },
-        }
-      );
-      const generated = response.data.choices[0].text.trim();
-      setGeneratedText(generated);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
+          {
+            role: 'user',
+            content: userMessage
+          }
+        ]
+      })
+    });
+  
+    // API'den gelen yanıtı işleyin
+    const data = await response.json();
+  
+    // Yanıttan üretilen metni alın
+    const generatedText = data.choices[0].message.content;
+  
+    // Üretilen metni duruma ekleyin
+    setGeneratedText(generatedText);
   };
 
   return (
