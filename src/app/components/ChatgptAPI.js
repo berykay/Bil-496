@@ -1,54 +1,74 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const ChatgptAPI = () => {
+  const [assistant, setAssistant] = useState(null);
+  const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState('');
   const [generatedText, setGeneratedText] = useState('');
+
+  useEffect(() => {
+    fetch('https://api.openai.com/v1/assistants/asst_41lBzAAC4q413iYJf2WKg8UP', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`, 
+      }
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Assistant could not be retrieved.');
+        }
+      })
+      .then(data => {
+        setAssistant(data);
+        console.log('Assistant retrieved successfully.'); 
+      })
+      .catch(error => {
+        console.error('Error retrieving assistant:', error); 
+      });
+  }, []);
 
   const handleInputChange = (e) => {
     setUserInput(e.target.value);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const userMessage = userInput;
-
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+  const sendMessage = async () => {
+    setMessages([...messages, { role: 'user', content: userInput }]);
+    const response = await fetch(`https://api.openai.com/v1/threads/${assistant.id}/messages`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`, // API anahtarınızı buraya ekleyin
+        'Authorization': `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`, 
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are a helpful assistant.'
-          },
-          {
-            role: 'user',
-            content: userMessage
-          }
-        ]
+        role: 'user',
+        content: userInput
       })
     });
-  
-    // API'den gelen yanıtı işleyin
     const data = await response.json();
-  
-    // Yanıttan üretilen metni alın
-    const generatedText = data.choices[0].message.content;
-  
-    // Üretilen metni duruma ekleyin
-    setGeneratedText(generatedText);
+    const assistantResponse = data.content;
+
+    setMessages([...messages, { role: 'assistant', content: assistantResponse }]);
+
+    setGeneratedText(assistantResponse);
+
+    setUserInput('');
   };
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <div>
+        {messages.map((message, index) => (
+          <div key={index} className={message.role}>
+            {message.content}
+          </div>
+        ))}
+      </div>
+      <div>
         <textarea
           value={userInput}
           onChange={handleInputChange}
@@ -56,8 +76,8 @@ const ChatgptAPI = () => {
           rows={4}
           cols={50}
         />
-        <button type="submit">Generate</button>
-      </form>
+        <button onClick={sendMessage} type="button">Send</button>
+      </div>
       {generatedText && (
         <div>
           <h3>Generated Text:</h3>
