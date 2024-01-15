@@ -1,0 +1,128 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  .modal {
+    background: rgba(85, 85, 85);
+    padding: 20px;
+    border-radius: 8px;
+    width: 500px; /* Adjust width as needed */
+    position: relative;
+    text-align: center;
+  }
+  
+  .tabs {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .tab {
+    background: none;
+    border: none;
+    padding: 10px 30px;
+    margin: 0 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .active {
+    border-bottom: 2px solid black;
+  }
+  
+  .signForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .signForm input {
+    margin: 10px 0;
+    padding: 10px;
+    width: 90%;
+  }
+  
+  .rememberMe {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    margin-left: 5%;
+    width: 90%; 
+  }
+  
+  .rememberMe label {
+    white-space: nowrap;
+  }
+  
+  .forgotPassword {
+    margin-left: auto; 
+  }
+  
+  .forgotPassword {
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 12px;
+    position: relative;
+    bottom: -5px;
+    }
+    
+    .signButton {
+    margin-top: 10px;
+    padding: 10px 50px;
+    color: rgb(232, 230, 227);
+    background-color: rgb(12, 126, 70);
+    text-shadow: none;
+    background-image: linear-gradient(rgb(34, 152, 77), rgb(12, 126, 70));
+    border-color: rgb(18, 186, 104);
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 1px 3px, rgba(70, 77, 91, 0.2) 0px -1px 4px inset;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 90%;
+    font-size: 1rem;
+    }
+    
+    .orSeparator {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #aaa;
+    }
+    
+    .socialSign button {
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: white;
+    width: 40%;
+    }
+    
+    .google {
+    background-color: #db4437;
+    }
+    
+    .facebook {
+    background-color: #4267B2;
+    }
+    
+    .linkedin {
+    background-color: #2867B2;
+    }
+    
+    .github {
+    background-color: #333;
+    }
+    
+    .footer {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    }

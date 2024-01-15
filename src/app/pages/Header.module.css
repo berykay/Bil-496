@@ -1,29 +1,52 @@
 .header {
-    display: flex;
-    justify-content: space-between; 
-    align-items: center;
-    margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.appName{
+  font-size: 2rem;
+  font-weight: bold;
+  margin-left: 2rem;
+  padding-right: 1rem;
+}
+
+.headerLinks {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.headerLink {
+  padding: 10px 40px;
+  margin: 0px;
+  text-decoration: none;
+  color: #333;
+  margin-right: 10px;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.headerLink:hover {
+  background-color: #ddd;
+  color: #000;
+}
+
+@media screen and (max-width: 768px) {
+  .header {
+    flex-direction: column;
   }
-  
+
   .headerLinks {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
+    flex-direction: column;
+    align-items: center;
   }
-  
+
   .headerLink {
-    padding: 10px 40px;
-    margin: 0px;
-    text-decoration: none;
-    color: #333;
-    margin-right: 10px;
-    font-weight: bold;
-    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out; /* Add these lines */
+    padding: 10px 20px; 
   }
-  
-  .headerLink:hover {
-    background-color: #ddd;
-    color: #000;
-  }
-  
+}
+
+
