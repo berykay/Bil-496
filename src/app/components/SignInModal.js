@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./SignInModal.module.css";
-import { signIn, signInWithGoogle, singUp } from "../firebase";
+import { signIn, signInWithGoogle, signUp } from "../../services/authService";
 
 const SignInModal = ({setIsLoggedIn, isLoggedIn}) => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -30,11 +30,9 @@ const SignInModal = ({setIsLoggedIn, isLoggedIn}) => {
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
     try {
-      await singUp(email, password);
+      await signUp(email, password);
       setIsLoggedIn(true);
     } catch (error) {
-      // Handle signup errors here
-      // Optionally, show an error message to the user
       console.error("Signup failed:", error.message);
     }
     

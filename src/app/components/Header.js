@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styles from "./Header.module.css";
-import { logout } from "../firebase";
+import { logout } from "../../services/authService";
 
 const Header = ({ setIsLoggedIn, isLoggedIn }) => {
 
