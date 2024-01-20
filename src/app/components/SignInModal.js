@@ -1,24 +1,55 @@
 import { useState } from "react";
 import styles from "./SignInModal.module.css";
+import { signIn, signInWithGoogle, singUp } from "../firebase";
 
-const SignInModal = ({ isOpen, onClose }) => {
-  const [isSignUp, setIsSignUp] = useState(false); 
+const SignInModal = ({setIsLoggedIn, isLoggedIn}) => {
+  const [isSignUp, setIsSignUp] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginFalse, setLoginFalse] = useState(false);
 
-  const handleSignInSubmit = (e) => {
+  const handleSignInSubmit = async (e) => {
     e.preventDefault();
+    try {
+      await signIn(email, password); // Assuming signIn is an async function
+      if (rememberMe) {
+        localStorage.setItem("rememberMe", true);
+      }
+      setIsLoggedIn(true);
+  
+     
+    } catch (error) {
+      // Handle any errors that occurred during sign-in
+      console.error("Error during sign-in:", error);
+      setLoginFalse(true); // Optionally set login state to false in case of error
+      // You might also want to display an error message to the user here
+    }
+  };
+  
+  const handleSignUpSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await singUp(email, password);
+      setIsLoggedIn(true);
+    } catch (error) {
+      // Handle signup errors here
+      // Optionally, show an error message to the user
+      console.error("Signup failed:", error.message);
+    }
+    
   };
 
-  const handleSignUpSubmit = (e) => {
-    e.preventDefault();
+  const handleGoogleSignIn = (provider) => {
+    console.log("Google Sign In");
+    signInWithGoogle();
   };
-
-  if (!isOpen) return null;
 
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
+    <div className={styles.modalOverlay}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <h2>Please Login To Continue</h2>
+        {loginFalse&&!isSignUp  ? ("Incorrect username or password") : ("")}
         <div className={styles.tabs}>
           <button
             className={`${styles.tab} ${!isSignUp ? styles.active : ""}`}
@@ -36,12 +67,28 @@ const SignInModal = ({ isOpen, onClose }) => {
         {!isSignUp ? (
           // Sign In Form
           <form className={styles.signForm} onSubmit={handleSignInSubmit}>
-            <input type="text" placeholder="Username or email" />
-            <input type="password" placeholder="Password" />
+            <input
+              type="text"
+              placeholder="Username or email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
             <div className={styles.rememberMe}>
               <div>
                 <label htmlFor="rememberMe">
-                  <input id="rememberMe" type="checkbox" value="test" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
+                  <input
+                    id="rememberMe"
+                    type="checkbox"
+                    value="test"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                  />
                   Remember me
                 </label>
               </div>
@@ -56,8 +103,18 @@ const SignInModal = ({ isOpen, onClose }) => {
         ) : (
           // Sign Up Form
           <form className={styles.signForm} onSubmit={handleSignUpSubmit}>
-            <input type="email" placeholder="E-mail" />
-            <input type="password" placeholder="Password" />
+            <input
+              type="email"
+              placeholder="E-mail"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
             <button type="submit" className={styles.signButton}>
               Sign Up
             </button>
@@ -66,28 +123,10 @@ const SignInModal = ({ isOpen, onClose }) => {
         <div className={styles.orSeparator}>or</div>
         <div className={styles.socialSign}>
           <button
-            onClick={() => handleSocialSignIn("Google")}
+            onClick={() => handleGoogleSignIn("Google")}
             className={styles.google}
           >
             Google
-          </button>
-          <button
-            onClick={() => handleSocialSignIn("Facebook")}
-            className={styles.facebook}
-          >
-            Facebook
-          </button>
-          <button
-            onClick={() => handleSocialSignIn("LinkedIn")}
-            className={styles.linkedin}
-          >
-            LinkedIn
-          </button>
-          <button
-            onClick={() => handleSocialSignIn("GitHub")}
-            className={styles.github}
-          >
-            GitHub
           </button>
         </div>
         <div className={styles.footer}>Why Create an Account?</div>
