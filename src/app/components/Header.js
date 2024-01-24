@@ -1,54 +1,34 @@
-import Link from "next/link";
+'use client';
+import React, { useEffect } from "react";
 import styles from "./Header.module.css";
-import { logout } from "../../services/authService";
+import { seeState } from "../../services/authService";
+import SignInModal from "./SignInModal";
+import HeaderComponent from "./HeaderComponent";
+import { getAuth } from "firebase/auth";
 
-const Header = ({ setIsLoggedIn, isLoggedIn }) => {
-
-
-  const logoutClick = () => {
-    console.log("Logout Clicked");
-    logout();
-    setIsLoggedIn(false);
-  };
-
+export const Header = ({ setIsLoggedIn, isLoggedIn }) => {
+    useEffect(() => {
+      const checkUserState = async () => {
+        setIsLoggedIn(await seeState(getAuth()));
+      };
+      checkUserState();
+    }, []);
+  
+    useEffect(() => {
+      
+    }, []);
   return (
-    <header className={styles.header}>
-      <div className={styles.appName}>My Diet Diary</div>
-      <nav>
-        <ul className={styles.headerLinks}>
-          <li>
-            <Link href="/" className={styles.headerLink}>
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link href="/mydiet" className={styles.headerLink}>
-              My Diet
-            </Link>
-          </li>
-          <li>
-            <Link href="/search" className={styles.headerLink}>
-              Search
-            </Link>
-          </li>
-          <li>
-            <Link href="/profile" className={styles.headerLink}>
-              Profile
-            </Link>
-          </li>
-          <li>
-            <button
-              href="/"
-              onClick={logoutClick}
-              className={styles.headerLink}
-            >
-              Logout
-            </button>
-          </li>
-        </ul>
-      </nav>
-    </header>
+    <>
+      {!isLoggedIn ? (
+        <>
+        <SignInModal setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
+        {console.log("Not Logged In")}
+        </>
+      ) : (
+        <>
+          <HeaderComponent className={styles.header}  setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
+        </>
+      )}
+    </>
   );
 };
-
-export default Header;
