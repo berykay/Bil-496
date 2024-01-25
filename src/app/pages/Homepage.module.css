@@ -18,6 +18,28 @@
 }
 
 .img {
-  width: 100%;
-  height: auto;
+  width: 100%; /* Adjust the width as needed */
+  height: 500px; /* Adjust the height to match the red box height */
+  object-fit: cover;
+  object-position: center; /* Adjust this value to match the center of the red box */
+  filter: brightness(75%);
+  padding: 0;
+  margin: 0;
+  position: relative;
 }
+
+.textOverImage {
+  position: absolute;
+  top: 25%;
+  left: 10%;
+  color: white;
+  font-size: 64px;
+  text-shadow: 2px 2px 4px #000000;
+}
+
+.zero{
+  padding: 0%;
+  margin: 0%;
+  width: 100%;
+}
+

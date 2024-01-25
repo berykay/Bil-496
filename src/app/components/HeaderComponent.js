@@ -13,7 +13,7 @@ const HeaderComponent = ({ setIsLoggedIn, isLoggedIn }) => {
 
   return (
     <header className={styles.header}>
-      <div className={styles.appName}>My Diet Diary</div>
+      <Link  href="/" className={styles.appName}>My Diet Diary</Link>
       <nav>
         <ul className={styles.headerLinks}>
           <li>
@@ -37,13 +37,13 @@ const HeaderComponent = ({ setIsLoggedIn, isLoggedIn }) => {
             </Link>
           </li>
           <li>
-            <button
+            <Link
               href="/"
               onClick={logoutClick}
               className={styles.headerLink}
             >
               Logout
-            </button>
+            </Link>
           </li>
         </ul>
       </nav>

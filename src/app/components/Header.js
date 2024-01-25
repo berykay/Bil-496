@@ -27,6 +27,7 @@ export const Header = ({ setIsLoggedIn, isLoggedIn }) => {
       ) : (
         <>
           <HeaderComponent className={styles.header}  setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
+          {console.log("Logged In")}
         </>
       )}
     </>
