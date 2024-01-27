@@ -1,7 +1,9 @@
 import Link from "next/link";
+import styles from "./MenuButon.module.css";
 
-export default function menuButon() {
-    return <div className={styles.menu}>
+export default function MenuButon(props) {
+    return ( 
+    <div className={styles.menu}>
       <Link className={styles.tarifler} href="/">
         <div>
           <span className="material-icons md-48 center margin-card-title">
@@ -10,5 +12,6 @@ export default function menuButon() {
         </div>
         <p className="center">Make My Diet Plan</p>
       </Link>
-    </div>;
+    </div>
+    );
   }
