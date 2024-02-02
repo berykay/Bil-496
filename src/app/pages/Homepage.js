@@ -3,7 +3,7 @@ import Xintake from "../components/Xintake";
 import styles from "./Homepage.module.css";
 import balancedDietImg from "../../images/balanced_diet.jpg";
 import Image from "next/image";
-import MenuButon from "../components/menuButon";
+import MenuButon from "../components/MenuButon";
 
 export default function Homepage() {
   return (
