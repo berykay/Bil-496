@@ -24,14 +24,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* Align items to the start */
     width: 700px;
     height: 700px;
     border: 1px solid black;
     border-radius: 10px;
-    background-color: red;
+    background-color: orange;
     transition: all 0.3s ease;
     box-shadow: 10px 10px 30px rgba(0,0,0,0.6);
+    overflow-y: auto; /* Add a vertical scrollbar if necessary */
+    padding: 1em; /* Add some padding */
 }
 
 .intakes{
@@ -56,4 +58,9 @@
     cursor: pointer;
     transition: all 0.3s ease;
     margin-top: 10px;
+}
+
+.meal{
+    width: 100%;
+    height: 100%;
 }

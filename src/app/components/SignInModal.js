@@ -12,7 +12,7 @@ const SignInModal = ({setIsLoggedIn, isLoggedIn}) => {
   const handleSignInSubmit = async (e) => {
     e.preventDefault();
     try {
-      await signIn(email, password); // Assuming signIn is an async function
+      await signIn(email, password, rememberMe);
       if (rememberMe) {
         localStorage.setItem("rememberMe", true);
       }
@@ -38,9 +38,14 @@ const SignInModal = ({setIsLoggedIn, isLoggedIn}) => {
     
   };
 
-  const handleGoogleSignIn = (provider) => {
+  const handleGoogleSignIn = async() => {
     console.log("Google Sign In");
-    signInWithGoogle();
+    try{
+      await signInWithGoogle();
+      setIsLoggedIn(true);
+    } catch (error) {
+      console.error("Google Sign In failed:", error.message);
+    }
   };
 
   return (

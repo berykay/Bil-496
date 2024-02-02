@@ -1,0 +1,48 @@
+
+.meal{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 30%;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: green;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.6);
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.mealTitle{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 100%;
+    justify-content: center;
+    margin-top: 2%;
+    margin-left: 2%;
+    font-weight: bold;
+}
+
+.mealInfo{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 100%;
+    justify-content: center;
+    margin-top: 1%;
+    margin-left: 1%;
+    color: orange;
+}
+
+.mealContent{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 100%;
+    justify-content: center;
+    margin-top: 1%;
+    margin-left: 1%;
+
+}

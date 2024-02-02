@@ -34,6 +34,7 @@ const GetStartedForm = () => {
 
   return (
     <Mylayout>
+      <div className={styles.getStartedForm}>
         <h1>Please fill in the informations below to get started!</h1>
         <form className={styles.form} onSubmit={handleSubmit}>
           <label htmlFor="fullName" className={styles.entryLabel}>
@@ -114,6 +115,7 @@ const GetStartedForm = () => {
           </label>
           <button className={styles.submitBtn}>Submit</button>
         </form>
+      </div>
     </Mylayout>
   );
 };

@@ -11,6 +11,9 @@ dependencies:
   firebase:
     specifier: ^10.7.1
     version: 10.7.1
+  js-cookie:
+    specifier: ^3.0.5
+    version: 3.0.5
   mssql:
     specifier: ^10.0.2
     version: 10.0.2
@@ -1459,6 +1462,11 @@ packages:
 
   /isarray@2.0.5:
     resolution: {integrity: sha512-xHjhDr3cNBK0BzdUJSPXZntQUx/mwMS5Rw4A7lPJ90XGAO6ISP/ePDNuo0vhqOZU+UD5JoodwCAAoZQd3FeAKw==}
+    dev: false
+
+  /js-cookie@3.0.5:
+    resolution: {integrity: sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==}
+    engines: {node: '>=14'}
     dev: false
 
   /js-md4@0.3.2:

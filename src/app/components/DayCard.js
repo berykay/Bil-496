@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./DayCard.module.css";
+import Meal from "./Meal";
 
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday','Sunday'];
 
@@ -7,7 +8,15 @@ export default function DayCard({ dayIndex,isActivated, onClick }) {
   return (
     <div onClick={onClick}>
       {isActivated ? (
-        <div className={styles.activeDayCard}>{days[dayIndex]} - DayCardActivated</div>
+        <div className={styles.activeDayCard}>
+          {days[dayIndex]} 
+          <Meal className={styles.meal} mealTitle="Kahvaltı" mealInfo="400Kcal" mealContent="asşldkads" />
+          <Meal className={styles.meal} mealTitle="Kahvaltı" mealInfo="400Kcal" mealContent="asşldkads" />
+          <Meal className={styles.meal} mealTitle="Kahvaltı" mealInfo="400Kcal" mealContent="asşldkads" />
+          <Meal className={styles.meal} mealTitle="Kahvaltı" mealInfo="400Kcal" mealContent="asşldkads" />
+          <Meal className={styles.meal} mealTitle="Kahvaltı" mealInfo="400Kcal" mealContent="asşldkads" />
+          
+          </div>
       ) : (
         <div className={styles.dayCard}>
             {days[dayIndex]}

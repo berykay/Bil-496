@@ -3,8 +3,6 @@ import styles from "./Header.module.css";
 import { logout } from "../../services/authService";
 
 const HeaderComponent = ({ setIsLoggedIn, isLoggedIn }) => {
-
-
   const logoutClick = () => {
     console.log("Logout Clicked");
     logout();
@@ -12,42 +10,43 @@ const HeaderComponent = ({ setIsLoggedIn, isLoggedIn }) => {
   };
 
   return (
-    <header className={styles.header}>
-      <Link  href="/" className={styles.appName}>My Diet Diary</Link>
-      <nav>
-        <ul className={styles.headerLinks}>
-          <li>
-            <Link href="/" className={styles.headerLink}>
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link href="/mydiet" className={styles.headerLink}>
-              My Diet
-            </Link>
-          </li>
-          <li>
-            <Link href="/search" className={styles.headerLink}>
-              Search
-            </Link>
-          </li>
-          <li>
-            <Link href="/profile" className={styles.headerLink}>
-              Profile
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/"
-              onClick={logoutClick}
-              className={styles.headerLink}
-            >
-              Logout
-            </Link>
-          </li>
-        </ul>
-      </nav>
-    </header>
+    <>
+      <header className={styles.header}>
+        <Link href="/" className={styles.appName}>
+          My Diet Diary
+        </Link>
+        <nav className={styles.nav}>
+          <ul className={styles.headerLinks}>
+            <li>
+              <Link href="/calendar" className={styles.headerLink}>
+                Calendar
+              </Link>
+            </li>
+            <li>
+              <Link href="/mydiet" className={styles.headerLink}>
+                My Diet
+              </Link>
+            </li>
+            <li>
+              <Link href="/recipe" className={styles.headerLink}>
+                Recipe
+              </Link>
+            </li>
+            <li></li>
+          </ul>
+        </nav>
+        <Link href="/profile" className={styles.headerLink}>
+                Profile
+        </Link>
+        <Link
+          href="/"
+          onClick={logoutClick}
+          className={`${styles.headerLink} ${styles.logoutLink}`}
+        >
+          Logout
+        </Link>
+      </header>
+    </>
   );
 };
 

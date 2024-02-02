@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { auth } from "../config/firebase";
 
 import {
@@ -16,6 +17,7 @@ const signUp = async (email, password) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     console.log("Signed up");
     const user = userCredential.user;
+    Cookies.set('user', JSON.stringify(user)); 
     return user; 
   } catch (error) {
     const errorCode = error.code;
@@ -25,10 +27,16 @@ const signUp = async (email, password) => {
   }
 };
 
-const signIn = async (email, password) => {
+const signIn = async (email, password, rememberMe) => {
   await signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
+      if (rememberMe) {
+        Cookies.set('user', JSON.stringify(user), { expires: 7 });
+      }
+      else{
+        Cookies.set('user', JSON.stringify(user));
+      }
       console.log("Signed in");
       console.log(user);
     })
@@ -66,6 +74,7 @@ const logout = () => {
   signOut(auth)
     .then(() => {
       console.log("Sign-out successful");
+      Cookies.set('user');
     })
     .catch((error) => {
       console.log("An error happened");
@@ -74,28 +83,17 @@ const logout = () => {
     });
 };
 
-const signInWithGoogle = () => {
-  signInWithPopup(auth, provider)
-  .then((result) => {
-    // This gives you a Google Access Token. You can use it to access the Google API.
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    const token = credential.accessToken;
-    // The signed-in user info.
+const signInWithGoogle =  async() => {
+  try{
+    const result = await signInWithPopup(auth, provider);
     const user = result.user;
-    // IdP data available using getAdditionalUserInfo(result)
-    // ...
-  }).catch((error) => {
-    // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // The email of the user's account used.
-    const email = error.customData.email;
-    // The AuthCredential type that was used.
-    const credential = GoogleAuthProvider.credentialFromError(error);
-    // ...
-    console.log(errorCode, errorMessage, email, credential);
+    Cookies.set('user', JSON.stringify(user));
+    console.log("Google Sign In");
+    console.log(user);
+  } catch (error) {
+    console.error("Google Sign In failed:", error.message);
     throw error;
-  });
+  }
 }
 
 

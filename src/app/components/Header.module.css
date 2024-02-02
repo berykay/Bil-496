@@ -1,8 +1,19 @@
 .header {
   display: flex;
+  flex-direction: row;
   align-items: center;
   width: 100%;
   background: linear-gradient(#009261, rgb(18, 28, 29));
+  
+}
+
+.nav{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 1rem;
 }
 
 .appName{
@@ -10,13 +21,11 @@
   font-size: 2rem;
   font-weight: bold;
   margin-left: 2rem;
-  padding-right: 1rem;
   padding: 0.5rem;
 }
 
 .headerLinks {
   display: flex;
-  justify-content: space-between;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -30,6 +39,10 @@
   margin-right: 10px;
   font-weight: bold;
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.logoutLink {
+  justify-content: end;
 }
 
 .headerLink:hover {
