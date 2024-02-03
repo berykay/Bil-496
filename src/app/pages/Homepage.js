@@ -10,6 +10,7 @@ export default function Homepage() {
     <div className={styles.zero}>
       <div className={styles.imageContainer}>
         <Image
+          priority
           className={styles.img}
           src={balancedDietImg}
           alt="Balanced Diet"
