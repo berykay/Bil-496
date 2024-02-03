@@ -41,10 +41,6 @@ CREATE TABLE FoodComponents (
 CREATE TABLE Meals (
     MealID INT AUTO_INCREMENT PRIMARY KEY,
     MealName VARCHAR(255) NOT NULL,
-    TotalCarbs DECIMAL(10,2) NOT NULL,
-    TotalFats DECIMAL(10,2) NOT NULL,
-    TotalProteins DECIMAL(10,2) NOT NULL,
-    TotalCalories INT NOT NULL,
     Category VARCHAR(255) NOT NULL,
     RegionID INT,
     FOREIGN KEY (RegionID) REFERENCES Regions(RegionID)
@@ -89,9 +85,9 @@ CREATE TABLE UserMeals (
     UserMealID INT AUTO_INCREMENT PRIMARY KEY,
     UserID INT NOT NULL,
     MealID INT NOT NULL,
-    DateConsumed DATETIME NOT NULL,
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
-    FOREIGN KEY (MealID) REFERENCES Meals(MealID)
+    FOREIGN KEY (MealID) REFERENCES Meals(MealID),
+    ADD COLUMN Frequency INT DEFAULT 1;
 );
 
 -- UserAllergies Tablosu (Opsiyonel, kullanıcıların alerjilerini ayrı bir tabloda saklamak için)
