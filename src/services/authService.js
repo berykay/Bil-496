@@ -15,39 +15,32 @@ const provider = new GoogleAuthProvider();
 const signUp = async (email, password) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    console.log("Signed up");
     const user = userCredential.user;
-    Cookies.set('user', JSON.stringify(user)); 
-    return user; 
+    // Cookie'yi oturum açık olduğu sürece ayarla
+    Cookies.set('user', JSON.stringify(user));
+    console.log("Signed up", user);
   } catch (error) {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    console.log("Error while signing up", errorCode, errorMessage);
-    throw error; 
+    console.error("Error while signing up", error);
+    throw error;
   }
 };
 
 const signIn = async (email, password, rememberMe) => {
-  await signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      if (rememberMe) {
-        Cookies.set('user', JSON.stringify(user), { expires: 7 });
-      }
-      else{
-        Cookies.set('user', JSON.stringify(user));
-      }
-      console.log("Signed in");
-      console.log(user);
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log("Error while signing in");
-      console.log(errorCode, errorMessage);
-      throw error;
-    });
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    if (rememberMe) {
+      Cookies.set('user', JSON.stringify(user), { expires: 7 });
+    } else {
+      Cookies.set('user', JSON.stringify(user));
+    }
+    console.log("Signed in", user);
+  } catch (error) {
+    console.error("Error while signing in", error);
+    throw error;
+  }
 };
+
 
 const seeState = async (auth) => {
   try {
@@ -74,7 +67,7 @@ const logout = () => {
   signOut(auth)
     .then(() => {
       console.log("Sign-out successful");
-      Cookies.set('user');
+      Cookies.remove('user');
     })
     .catch((error) => {
       console.log("An error happened");

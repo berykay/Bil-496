@@ -1,22 +1,21 @@
 'use client';
 import React, { useEffect } from "react";
 import styles from "./Header.module.css";
-import { seeState } from "../../services/authService";
 import SignInModal from "./SignInModal";
 import HeaderComponent from "./HeaderComponent";
-import { getAuth } from "firebase/auth";
+import Cookies from "js-cookie";
 
 export const Header = ({ setIsLoggedIn, isLoggedIn }) => {
-    useEffect(() => {
-      const checkUserState = async () => {
-        setIsLoggedIn(await seeState(getAuth()));
-      };
-      checkUserState();
-    }, []);
+  useEffect(() => {
+    const userCookie = Cookies.get('user'); 
+    const user = userCookie ? JSON.parse(userCookie) : null; 
   
-    useEffect(() => {
-      
-    }, []);
+    if (user) {
+      setIsLoggedIn(true); 
+    } else {
+      setIsLoggedIn(false); 
+    }
+  }, []);
   return (
     <>
       {!isLoggedIn ? (
