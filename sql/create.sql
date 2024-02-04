@@ -98,3 +98,20 @@ CREATE TABLE UserAllergies (
     FOREIGN KEY (AllergenID) REFERENCES Allergens(AllergenID),
     PRIMARY KEY (UserID, AllergenID)
 );
+
+CREATE TABLE DietPlans (
+    DietPlanID INT AUTO_INCREMENT PRIMARY KEY,
+    UserID INT NOT NULL,
+    PlanDate DATE NOT NULL,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+CREATE TABLE DietPlanDetails (
+    DetailID INT AUTO_INCREMENT PRIMARY KEY,
+    DietPlanID INT NOT NULL,
+    MealID INT NOT NULL,
+    ServingSize DECIMAL(10,2), -- Bu, porsiyon büyüklüğü veya miktarı olabilir.
+    MealType ENUM('Breakfast', 'Lunch', 'Dinner', 'Snack') NOT NULL,
+    FOREIGN KEY (DietPlanID) REFERENCES DietPlans(DietPlanID),
+    FOREIGN KEY (MealID) REFERENCES Meals(MealID)
+);

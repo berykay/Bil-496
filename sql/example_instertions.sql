@@ -61,3 +61,16 @@ INSERT INTO UserMeals (UserID, MealID, Frequency) VALUES
 INSERT INTO UserAllergies (UserID, AllergenID) VALUES
 (1, 1), -- John Doe is allergic to Peanuts
 (2, 2); -- Jane Smith is lactose intolerant
+
+INSERT INTO DietPlans (UserID, PlanDate) VALUES ((SELECT UserID FROM Users WHERE Username = 'JohnDoe'), '2023-10-01');
+
+-- Örnek olarak, MealID'ler 1, 2 ve 3 ID'li yemekleri temsil etsin.
+-- John'un 2023-10-01 tarihindeki kahvaltısı için 2 yumurta (MealID: 1)
+INSERT INTO DietPlanDetails (DietPlanID, MealID, ServingSize, MealType) VALUES
+((SELECT DietPlanID FROM DietPlans WHERE UserID = (SELECT UserID FROM Users WHERE Username = 'JohnDoe') AND PlanDate = '2023-10-01'), 1, 2, 'Breakfast');
+
+-- John'un öğle yemeği için patates yemeği (MealID: 2) ve 1 dilim ekmek (MealID: 3)
+INSERT INTO DietPlanDetails (DietPlanID, MealID, ServingSize, MealType) VALUES
+((SELECT DietPlanID FROM DietPlans WHERE UserID = (SELECT UserID FROM Users WHERE Username = 'JohnDoe') AND PlanDate = '2023-10-01'), 2, 200, 'Lunch'),
+((SELECT DietPlanID FROM DietPlans WHERE UserID = (SELECT UserID FROM Users WHERE Username = 'JohnDoe') AND PlanDate = '2023-10-01'), 3, 1, 'Lunch');
+
