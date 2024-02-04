@@ -4,16 +4,9 @@ import styles from "./Homepage.module.css";
 import balancedDietImg from "../../images/balanced_diet.jpg";
 import Image from "next/image";
 import MenuButon from "../components/MenuButon";
-import { useEffect } from "react";
 
 export default function Homepage() {
-  useEffect(() => {
-    fetch('/api/sqlservice')
-      .then(response => response.json())
-      .then(data => console.log(data.message))
-      .catch(error => console.error('Hata:', error));
-  }, []);
-
+  
   return (
     <div className={styles.zero}>
       <div className={styles.imageContainer}>

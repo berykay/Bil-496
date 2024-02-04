@@ -1,31 +1,39 @@
--- Users Tablosu
-CREATE TABLE Users (
+-- User Tablosu
+CREATE TABLE User (
     UserID INT AUTO_INCREMENT PRIMARY KEY,
-    Username VARCHAR(255) NOT NULL,
-    Gender ENUM('Male', 'Female', 'Other') NOT NULL,
-    Age INT NOT NULL,
-    Height INT NOT NULL,
-    Weight INT NOT NULL,
-    Goal ENUM('Lose Weight', 'Gain Muscle', 'Maintain Weight') NOT NULL,
-    DietPreference ENUM('Omnivore', 'Vegetarian', 'Vegan') NOT NULL,
-    ActivityLevel ENUM('Sedentary', 'Lightly Active', 'Moderately Active', 'Very Active', 'Extra Active') NOT NULL DEFAULT 'Sedentary',
+    Username VARCHAR(255),
+    Email VARCHAR(255) NOT NULL,
+    Gender ENUM('Male', 'Female', 'Other'),
+    Age INT,
+    Height INT,
+    Weight INT,
+    ActivityLevel ENUM('Sedentary', 'Lightly Active', 'Moderately Active', 'Very Active', 'Extra Active') DEFAULT 'Lightly Active'
 );
 
--- Regions Tablosu
-CREATE TABLE Regions (
+CREATE TABLE Goal (
+    GoalID INT AUTO_INCREMENT PRIMARY KEY,
+    GoalName VARCHAR(255) NOT NULL
+);
+CREATE TABLE DietPreference(
+    DietPreferenceID INT AUTO_INCREMENT PRIMARY KEY,
+    DietPreferenceName VARCHAR(255) NOT NULL
+);
+
+-- Region Tablosu
+CREATE TABLE Region (
     RegionID INT AUTO_INCREMENT PRIMARY KEY,
     Country VARCHAR(255) NOT NULL,
     City VARCHAR(255) NOT NULL
 );
 
--- HealthConditions Tablosu
-CREATE TABLE HealthConditions (
+-- HealthCondition Tablosu
+CREATE TABLE HealthCondition (
     ConditionID INT AUTO_INCREMENT PRIMARY KEY,
     ConditionName VARCHAR(255) NOT NULL
 );
 
--- FoodComponents Tablosu
-CREATE TABLE FoodComponents (
+-- FoodComponent Tablosu
+CREATE TABLE FoodComponent (
     ComponentID INT AUTO_INCREMENT PRIMARY KEY,
     Name VARCHAR(255) NOT NULL,
     Measure VARCHAR(50) NOT NULL,
@@ -35,84 +43,87 @@ CREATE TABLE FoodComponents (
     Proteins DECIMAL(10,2) NOT NULL,
     Category VARCHAR(255) NOT NULL,
     RegionID INT,
-    FOREIGN KEY (RegionID) REFERENCES Regions(RegionID)
+    FOREIGN KEY (RegionID) REFERENCES Region(RegionID)
 );
 
--- Meals Tablosu
-CREATE TABLE Meals (
+-- Meal Tablosu
+CREATE TABLE Meal (
     MealID INT AUTO_INCREMENT PRIMARY KEY,
     MealName VARCHAR(255) NOT NULL,
     Category VARCHAR(255) NOT NULL,
     RegionID INT,
-    FOREIGN KEY (RegionID) REFERENCES Regions(RegionID)
+    FOREIGN KEY (RegionID) REFERENCES Region(RegionID)
 );
 
-CREATE TABLE MealComponents (
+-- MealComponent Tablosu
+CREATE TABLE MealComponent (
     MealComponentID INT AUTO_INCREMENT PRIMARY KEY,
     MealID INT NOT NULL,
     ComponentID INT NOT NULL,
-    Amount DECIMAL(10,2) NOT NULL, -- Bu, yemeğin içindeki her bir bileşenin miktarını gram cinsinden belirtir.
-    FOREIGN KEY (MealID) REFERENCES Meals(MealID),
-    FOREIGN KEY (ComponentID) REFERENCES FoodComponents(ComponentID)
+    Amount DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (MealID) REFERENCES Meal(MealID),
+    FOREIGN KEY (ComponentID) REFERENCES FoodComponent(ComponentID)
 );
 
--- Allergens Tablosu
-CREATE TABLE Allergens (
+-- Allergen Tablosu
+CREATE TABLE Allergen (
     AllergenID INT AUTO_INCREMENT PRIMARY KEY,
     AllergenName VARCHAR(255) NOT NULL
 );
 
--- ComponentAllergens Tablosu
-CREATE TABLE ComponentAllergens (
+-- ComponentAllergen Tablosu
+CREATE TABLE ComponentAllergen (
     ComponentID INT NOT NULL,
     AllergenID INT NOT NULL,
-    FOREIGN KEY (ComponentID) REFERENCES FoodComponents(ComponentID),
-    FOREIGN KEY (AllergenID) REFERENCES Allergens(AllergenID),
+    FOREIGN KEY (ComponentID) REFERENCES FoodComponent(ComponentID),
+    FOREIGN KEY (AllergenID) REFERENCES Allergen(AllergenID),
     PRIMARY KEY (ComponentID, AllergenID)
 );
 
--- FoodPreferences Tablosu
-CREATE TABLE FoodPreferences (
+-- FoodPreference Tablosu
+CREATE TABLE FoodPreference (
     PreferenceID INT AUTO_INCREMENT PRIMARY KEY,
     UserID INT NOT NULL,
     ComponentID INT NOT NULL,
     PreferenceType ENUM('Like', 'Dislike') NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES Users(UserID),
-    FOREIGN KEY (ComponentID) REFERENCES FoodComponents(ComponentID)
+    FOREIGN KEY (UserID) REFERENCES User(UserID),
+    FOREIGN KEY (ComponentID) REFERENCES FoodComponent(ComponentID)
 );
 
--- UserMeals Tablosu
-CREATE TABLE UserMeals (
+-- UserMeal Tablosu
+CREATE TABLE UserMeal (
     UserMealID INT AUTO_INCREMENT PRIMARY KEY,
     UserID INT NOT NULL,
     MealID INT NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES Users(UserID),
-    FOREIGN KEY (MealID) REFERENCES Meals(MealID),
-    ADD COLUMN Frequency INT DEFAULT 1;
+    Frequency INT DEFAULT 1,
+    FOREIGN KEY (UserID) REFERENCES User(UserID),
+    FOREIGN KEY (MealID) REFERENCES Meal(MealID)
 );
 
--- UserAllergies Tablosu (Opsiyonel, kullanıcıların alerjilerini ayrı bir tabloda saklamak için)
-CREATE TABLE UserAllergies (
+-- UserAllergy Tablosu
+CREATE TABLE UserAllergy (
     UserID INT NOT NULL,
     AllergenID INT NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES Users(UserID),
-    FOREIGN KEY (AllergenID) REFERENCES Allergens(AllergenID),
+    FOREIGN KEY (UserID) REFERENCES User(UserID),
+    FOREIGN KEY (AllergenID) REFERENCES Allergen(AllergenID),
     PRIMARY KEY (UserID, AllergenID)
 );
 
-CREATE TABLE DietPlans (
+-- DietPlan Tablosu
+CREATE TABLE DietPlan (
     DietPlanID INT AUTO_INCREMENT PRIMARY KEY,
     UserID INT NOT NULL,
     PlanDate DATE NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+    FOREIGN KEY (UserID) REFERENCES User(UserID)
 );
 
-CREATE TABLE DietPlanDetails (
+-- DietPlanDetail Tablosu
+CREATE TABLE DietPlanDetail (
     DetailID INT AUTO_INCREMENT PRIMARY KEY,
     DietPlanID INT NOT NULL,
     MealID INT NOT NULL,
-    ServingSize DECIMAL(10,2), -- Bu, porsiyon büyüklüğü veya miktarı olabilir.
+    ServingSize DECIMAL(10,2),
     MealType ENUM('Breakfast', 'Lunch', 'Dinner', 'Snack') NOT NULL,
-    FOREIGN KEY (DietPlanID) REFERENCES DietPlans(DietPlanID),
-    FOREIGN KEY (MealID) REFERENCES Meals(MealID)
+    FOREIGN KEY (DietPlanID) REFERENCES DietPlan(DietPlanID),
+    FOREIGN KEY (MealID) REFERENCES Meal(MealID)
 );
