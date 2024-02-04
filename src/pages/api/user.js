@@ -17,35 +17,60 @@ export default async function handler(req, res) {
 }
 
 async function getUser(req, res, userID) {
+  let dbConnection;
   try {
-    const dbConnection = await pool.getConnection();
-    const [user] = await dbConnection.query("SELECT * FROM Users WHERE id = ?", [userID]);
+    dbConnection = await pool.getConnection();
+    const [users] = await dbConnection.query("SELECT * FROM User WHERE UserID = ?", [userID]);
     dbConnection.release();
 
-    if (user.length > 0) {
-      return res.status(200).json(user[0]);
+    if (users.length > 0) {
+      const user = users[0];
+      return res.status(200).json({ user });
     } else {
-      return res.status(404).json({ message: "Kullanıcı bulunamadı" });
+      return res.status(404).json({ message: "User not found" });
     }
   } catch (error) {
-    dbConnection.release();
-    return res.status(500).json({ message: "Veritabanına bağlanılamadı", error: error.message });
+    if (dbConnection) dbConnection.release();
+    console.error("Database connection error:", error);
+    return res.status(500).json({ message: "Database connection error", error: error.message });
   }
 }
+
 
 async function createUser(req, res) {
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', ['POST']);
+    return res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
+
+  let dbConnection;
   try {
-    const { name, email } = req.body; 
-    const dbConnection = await pool.getConnection();
-    const [result] = await dbConnection.query("INSERT INTO Users (name, email) VALUES (?, ?)", [name, email]);
+    const { email } = req.body; // We expect to receive only the email in the body
+
+    dbConnection = await pool.getConnection();
+
+    const insertQuery = `
+      INSERT INTO User (Email, NewUser) VALUES (?, TRUE)
+    `;
+
+    const [result] = await dbConnection.query(insertQuery, [email]);
+
     dbConnection.release();
 
-    return res.status(201).json({ message: "Kullanıcı oluşturuldu", userId: result.insertId });
+    return res.status(201).json({
+      message: "User created successfully",
+      userId: result.insertId
+    });
   } catch (error) {
-    dbConnection.release();
-    return res.status(500).json({ message: "Veritabanına bağlanılamadı", error: error.message });
+    if (dbConnection) dbConnection.release();
+    console.error("Failed to create user in the database:", error);
+    return res.status(500).json({
+      message: "Failed to connect to the database",
+      error: error.message
+    });
   }
 }
+
 
 async function deleteUser(req, res, userID) {
   try {

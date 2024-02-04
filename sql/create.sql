@@ -2,6 +2,7 @@
 CREATE TABLE User (
     UserID INT AUTO_INCREMENT PRIMARY KEY,
     Username VARCHAR(255),
+    NewUser BOOLEAN DEFAULT TRUE;
     Email VARCHAR(255) NOT NULL,
     Gender ENUM('Male', 'Female', 'Other'),
     Age INT,

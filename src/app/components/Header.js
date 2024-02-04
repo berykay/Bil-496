@@ -16,6 +16,7 @@ export const Header = ({ setIsLoggedIn, isLoggedIn }) => {
       setIsLoggedIn(false); 
     }
   }, []);
+  
   return (
     <>
       {!isLoggedIn ? (

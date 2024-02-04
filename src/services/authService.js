@@ -16,9 +16,26 @@ const signUp = async (email, password) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    // Cookie'yi oturum açık olduğu sürece ayarla
     Cookies.set('user', JSON.stringify(user));
-    console.log("Signed up", user);
+    console.log("Signed up with Firebase", user);
+
+    const response = await fetch('/api/user', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: user.email, 
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create user in database');
+    }
+
+    const dbUser = await response.json();
+    console.log("User created in database", dbUser);
+
   } catch (error) {
     console.error("Error while signing up", error);
     throw error;

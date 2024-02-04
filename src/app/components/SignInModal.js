@@ -35,7 +35,6 @@ const SignInModal = ({setIsLoggedIn, isLoggedIn}) => {
     } catch (error) {
       console.error("Signup failed:", error.message);
     }
-    
   };
 
   const handleGoogleSignIn = async() => {
