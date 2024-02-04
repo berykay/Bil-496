@@ -7,7 +7,8 @@ CREATE TABLE Users (
     Height INT NOT NULL,
     Weight INT NOT NULL,
     Goal ENUM('Lose Weight', 'Gain Muscle', 'Maintain Weight') NOT NULL,
-    DietPreference ENUM('Omnivore', 'Vegetarian', 'Vegan') NOT NULL
+    DietPreference ENUM('Omnivore', 'Vegetarian', 'Vegan') NOT NULL,
+    ActivityLevel ENUM('Sedentary', 'Lightly Active', 'Moderately Active', 'Very Active', 'Extra Active') NOT NULL DEFAULT 'Sedentary',
 );
 
 -- Regions Tablosu
