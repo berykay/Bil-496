@@ -38,28 +38,31 @@ async function getUser(req, res, userID) {
 
 
 async function createUser(req, res) {
+  console.log("Creating user in the database");
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST']);
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
   let dbConnection;
+  console.log("!Creating user in the database");
   try {
-    const { email } = req.body; // We expect to receive only the email in the body
+    console.log("Creating user in the database");
+    const { uid, email } = req.body;
 
     dbConnection = await pool.getConnection();
 
     const insertQuery = `
-      INSERT INTO User (Email, NewUser) VALUES (?, TRUE)
+      INSERT INTO User (UserID, Email, NewUser) VALUES (?, ?, TRUE)
     `;
 
-    const [result] = await dbConnection.query(insertQuery, [email]);
+    const [result] = await dbConnection.query(insertQuery, [uid, email]);
 
     dbConnection.release();
 
     return res.status(201).json({
       message: "User created successfully",
-      userId: result.insertId
+      userId: uid
     });
   } catch (error) {
     if (dbConnection) dbConnection.release();

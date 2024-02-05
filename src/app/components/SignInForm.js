@@ -1,9 +1,24 @@
 import React from 'react'
-import { useState } from "react";
+import { useState, useEffect } from 'react';
 import styles from "./SignInForm.module.css";
 
+
 export default function SignInForm() {
+  useEffect(() => {
+    fetch(
+      "https://valid.layercode.workers.dev/list/countries?format=select&flags=true&value=code"
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setCountries(data.countries);
+        setSelectedCountry(data.userSelectValue);
+      });
+  }, []);
+
+
     const [goal, setGoal] = useState('');
+    const [countries, setCountries] = useState([]);
+    const [selectedCountry, setSelectedCountry] = useState({});
     const [formData, setFormData] = useState({
       fullName: "",
       gender: "",
@@ -12,36 +27,21 @@ export default function SignInForm() {
       weight: null,
       goal: "",
       dietPreference: "",
+      allergies: "",
+      region: "",
     });
   
     const handleSubmit = (e) => {
       e.preventDefault();
       const { fullName, gender, age, height, weight, goal, dietPreference } = formData;
-      if (fullName && gender && age && height && weight && goal && dietPreference) {
+      if (fullName && gender && age && height && weight && goal && dietPreference && allergies && region) {
         navigate("/overview", {
           state: { ...formData },
         });
       } else {
         alert("All fields are required!");
-        //print the empty fields
         alert(Object.keys(formData).filter((key) => !formData[key]).join(", "));
       }
-    };
-  
-    const handleHeightChange = (e) => {
-      const { value } = e.target;
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        height: value,
-      }));
-    };
-  
-    const handleWeightChange = (e) => {
-      const { value } = e.target;
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        weight: value,
-      }));
     };
   
     const handleChange = (e) => {
@@ -53,6 +53,7 @@ export default function SignInForm() {
     };
   return (
     <div className={styles.getStartedForm}>
+      {console.log(formData)}
         <h1>Please fill in the informations below to get started!</h1>
         <form className={styles.form} onSubmit={handleSubmit}>
           <label htmlFor="fullName" className={styles.entryLabel}>
@@ -87,10 +88,10 @@ export default function SignInForm() {
             Height :
             <input
               type="number"
-              id="height"
+              name="height"
               placeholder="e.g. 150"
               min="0"
-              onChange={(e) => handleHeightChange(e)}
+              onChange={handleChange}
             />
             <div className={styles.unitToggle}>
               <fieldset className={styles.radioSwitch}>
@@ -111,10 +112,10 @@ export default function SignInForm() {
             Weight :
             <input
               type="number"
-              id="weight"
+              name="weight"
               placeholder="e.g. 160"
               min="0"
-              onChange={(e) => handleWeightChange(e)}
+              onChange={handleChange}
             />
             <div className={styles.unitToggle}>
               <fieldset className={styles.radioSwitch}>
@@ -195,12 +196,12 @@ export default function SignInForm() {
             Region :
             <select id="region" name="region" onBlur={handleChange}>
               <option value="">Select Region</option>
-              <option value="Africa">Africa</option>
-              <option value="Asia">Asia</option>
-              <option value="Europe">Europe</option>
-              <option value="North America">North America</option>
-              <option value="Oceania">Oceania</option>
-              <option value="South America">South America</option>
+              {countries.map((country) => (
+                <option key={country.value} value={country.label}>
+                  {country.label}
+                </option>
+              ))}
+
             </select>
           </label>
           <button className={styles.submitBtn} type="submit"> Save </button>

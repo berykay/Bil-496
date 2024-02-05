@@ -1,41 +1,46 @@
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import { auth } from "../config/firebase";
 
 import {
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    onAuthStateChanged,
-    GoogleAuthProvider,
-    signInWithPopup,
-    signOut,
-  } from "firebase/auth";
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
 
 const provider = new GoogleAuthProvider();
 
 const signUp = async (email, password) => {
   try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     const user = userCredential.user;
-    Cookies.set('user', JSON.stringify(user));
+    Cookies.set("user", JSON.stringify(user));
     console.log("Signed up with Firebase", user);
 
-    const response = await fetch('/api/user', {
-      method: 'POST',
+    const response = await fetch("http://localhost:3000/api/user", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: user.email, 
+        uid: user.uid,
+        email: user.email,
       }),
     });
 
     if (!response.ok) {
-      throw new Error('Failed to create user in database');
+      const errorDetails = await response.text(); // or response.json() if the server sends JSON response
+      throw new Error(`Failed to create user in database: ${errorDetails}`);
     }
 
     const dbUser = await response.json();
     console.log("User created in database", dbUser);
-
   } catch (error) {
     console.error("Error while signing up", error);
     throw error;
@@ -44,12 +49,16 @@ const signUp = async (email, password) => {
 
 const signIn = async (email, password, rememberMe) => {
   try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     const user = userCredential.user;
     if (rememberMe) {
-      Cookies.set('user', JSON.stringify(user), { expires: 7 });
+      Cookies.set("user", JSON.stringify(user), { expires: 7 });
     } else {
-      Cookies.set('user', JSON.stringify(user));
+      Cookies.set("user", JSON.stringify(user));
     }
     console.log("Signed in", user);
   } catch (error) {
@@ -57,7 +66,6 @@ const signIn = async (email, password, rememberMe) => {
     throw error;
   }
 };
-
 
 const seeState = async (auth) => {
   try {
@@ -76,7 +84,7 @@ const seeState = async (auth) => {
     }
   } catch (error) {
     console.error("Error while checking user state:", error);
-    throw error; 
+    throw error;
   }
 };
 
@@ -84,7 +92,7 @@ const logout = () => {
   signOut(auth)
     .then(() => {
       console.log("Sign-out successful");
-      Cookies.remove('user');
+      Cookies.remove("user");
     })
     .catch((error) => {
       console.log("An error happened");
@@ -93,19 +101,17 @@ const logout = () => {
     });
 };
 
-const signInWithGoogle =  async() => {
-  try{
+const signInWithGoogle = async () => {
+  try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
-    Cookies.set('user', JSON.stringify(user));
+    Cookies.set("user", JSON.stringify(user));
     console.log("Google Sign In");
     console.log(user);
   } catch (error) {
     console.error("Google Sign In failed:", error.message);
     throw error;
   }
-}
-
-
+};
 
 export { signUp, signIn, seeState, logout, signInWithGoogle };

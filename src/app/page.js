@@ -6,6 +6,7 @@ import Mylayout from "./mylayout";
 
 export default function Home({children}) {
 
+  
   return (
     <Mylayout>
       <Homepage />

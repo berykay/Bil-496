@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
+import styles from './ChatgptAPI.module.css';
 
 const ChatgptAPI = () => {
   const [assistant, setAssistant] = useState(null);
