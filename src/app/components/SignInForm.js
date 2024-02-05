@@ -181,6 +181,28 @@ export default function SignInForm() {
               />
             )}
           </label>
+          <label htmlFor="allergies" className={styles.entryLabel}>
+            Allergies :
+            <input
+              type="text"
+              id="allergies"
+              name="allergies"
+              placeholder="e.g. peanuts, shellfish"
+              onChange={handleChange}
+            />
+          </label>
+          <label htmlFor="region" className={styles.entryLabel}>
+            Region :
+            <select id="region" name="region" onBlur={handleChange}>
+              <option value="">Select Region</option>
+              <option value="Africa">Africa</option>
+              <option value="Asia">Asia</option>
+              <option value="Europe">Europe</option>
+              <option value="North America">North America</option>
+              <option value="Oceania">Oceania</option>
+              <option value="South America">South America</option>
+            </select>
+          </label>
           <button className={styles.submitBtn} type="submit"> Save </button>
         </form>
       </div>

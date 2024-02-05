@@ -8,7 +8,11 @@ CREATE TABLE User (
     Age INT,
     Height INT,
     Weight INT,
-    ActivityLevel ENUM('Sedentary', 'Lightly Active', 'Moderately Active', 'Very Active', 'Extra Active') DEFAULT 'Lightly Active'
+    ActivityLevel ENUM('Sedentary', 'Lightly Active', 'Moderately Active', 'Very Active', 'Extra Active') DEFAULT 'Lightly Active',
+    ADD COLUMN RegionID INT,
+    ADD COLUMN AllergenID INT,
+    ADD FOREIGN KEY (AllergenID) REFERENCES Allergen(AllergenID);
+    ADD FOREIGN KEY (RegionID) REFERENCES Region(RegionID);
 );
 
 CREATE TABLE Goal (
