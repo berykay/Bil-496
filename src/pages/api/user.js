@@ -20,18 +20,18 @@ async function getUser(req, res, userID) {
   let dbConnection;
   try {
     dbConnection = await pool.getConnection();
-    const [users] = await dbConnection.query("SELECT * FROM User WHERE UserID = ?", [userID]);
+    const query = "SELECT * FROM User WHERE UserID = ?";
+    const [users] = await dbConnection.query(query, [userID]);
     dbConnection.release();
 
     if (users.length > 0) {
       const user = users[0];
-      return res.status(200).json({ user });
+      return res.status(200).json(user);
     } else {
       return res.status(404).json({ message: "User not found" });
     }
   } catch (error) {
     if (dbConnection) dbConnection.release();
-    console.error("Database connection error:", error);
     return res.status(500).json({ message: "Database connection error", error: error.message });
   }
 }

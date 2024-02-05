@@ -12,6 +12,21 @@ import {
 
 const provider = new GoogleAuthProvider();
 
+const getCurrentUserId = () => {
+  const user = auth.currentUser;
+  try {
+    if (user) {
+      return user.uid;
+    } else {
+      console.error("No user is currently signed in.");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error while getting current user ID:", error);
+    throw error;
+  }
+};
+
 const signUp = async (email, password) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(
@@ -114,4 +129,4 @@ const signInWithGoogle = async () => {
   }
 };
 
-export { signUp, signIn, seeState, logout, signInWithGoogle };
+export { getCurrentUserId ,signUp, signIn, seeState, logout, signInWithGoogle };
