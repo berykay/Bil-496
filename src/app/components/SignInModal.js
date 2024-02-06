@@ -2,7 +2,7 @@ import { useState } from "react";
 import styles from "./SignInModal.module.css";
 import { signIn, signInWithGoogle, signUp } from "../../services/authService";
 
-const SignInModal = ({setIsLoggedIn, isLoggedIn}) => {
+const SignInModal = ({setIsLoggedIn, isLoggedIn, setIsFirstLogin, isFirstLogin}) => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [email, setEmail] = useState("");
@@ -17,6 +17,7 @@ const SignInModal = ({setIsLoggedIn, isLoggedIn}) => {
         localStorage.setItem("rememberMe", true);
       }
       setIsLoggedIn(true);
+      setIsFirstLogin(false);
   
      
     } catch (error) {
@@ -31,6 +32,7 @@ const SignInModal = ({setIsLoggedIn, isLoggedIn}) => {
     e.preventDefault();
     try {
       await signUp(email, password);
+      setIsFirstLogin(true);
       setIsLoggedIn(true);
     } catch (error) {
       console.error("Signup failed:", error.message);

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import styles from "./SignInForm.module.css";
 
 
-export default function SignInForm() {
+export default function SignInForm( {setIsFirstLogin, isFirstLogin} ) {
   useEffect(() => {
     fetch(
       "https://valid.layercode.workers.dev/list/countries?format=select&flags=true&value=code"
@@ -35,9 +35,8 @@ export default function SignInForm() {
       e.preventDefault();
       const { fullName, gender, age, height, weight, goal, dietPreference } = formData;
       if (fullName && gender && age && height && weight && goal && dietPreference && allergies && region) {
-        navigate("/overview", {
-          state: { ...formData },
-        });
+        
+        setIsFirstLogin(false);
       } else {
         alert("All fields are required!");
         alert(Object.keys(formData).filter((key) => !formData[key]).join(", "));
@@ -205,6 +204,9 @@ export default function SignInForm() {
             </select>
           </label>
           <button className={styles.submitBtn} type="submit"> Save </button>
+          {isFirstLogin && 
+              <button onClick={() => setIsFirstLogin(false)}>Skip</button>
+          }
         </form>
       </div>
   )

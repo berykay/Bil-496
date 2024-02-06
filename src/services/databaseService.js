@@ -15,7 +15,7 @@ const getIsNewUser = async () => {
     console.error('User information not found.');
     userInfo = await fetchUserInfo();
   }
-  return userInfo?.NewUser;
+  return userInfo.then((response ) => response .json()).then((data ) => data );
 };
 
 const fetchUserInfo = async () => {
