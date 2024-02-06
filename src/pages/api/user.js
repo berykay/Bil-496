@@ -8,10 +8,12 @@ export default async function handler(req, res) {
       return getUser(req, res, userID);
     case 'POST':
       return createUser(req, res);
+    case 'PUT':
+      return updateUser(req, res, userID);
     case 'DELETE':
       return deleteUser(req, res, userID);
     default:
-      res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
+      res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE']);
       return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
@@ -89,5 +91,43 @@ async function deleteUser(req, res, userID) {
   } catch (error) {
     dbConnection.release();
     return res.status(500).json({ message: "Veritabanına bağlanılamadı", error: error.message });
+  }
+}
+
+async function updateUser(req, res, userID) {
+  if (!userID) {
+    return res.status(400).json({ message: "UserID is required" });
+  }
+
+  let dbConnection;
+  try {
+    const { fullName, gender, age, height, weight, goal, dietPreference, allergies, region, activityLevel } = req.body;
+    dbConnection = await pool.getConnection();
+
+    const updateQuery = `
+      UPDATE User SET
+      FullName = ?, Gender = ?, Age = ?, Height = ?, Weight = ?, Goal = ?,
+      DietPreference = ?, Allergies = ?, Region = ?, ActivityLevel = ?
+      WHERE UserID = ?
+    `;
+
+    const [result] = await dbConnection.query(updateQuery, [
+      fullName, gender, age, height, weight, goal, dietPreference, allergies, region, activityLevel, userID
+    ]);
+
+    dbConnection.release();
+
+    if (result.affectedRows > 0) {
+      return res.status(200).json({ message: "User updated successfully" });
+    } else {
+      return res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    if (dbConnection) dbConnection.release();
+    console.error("Failed to update user:", error);
+    return res.status(500).json({
+      message: "Failed to update user in the database",
+      error: error.message
+    });
   }
 }

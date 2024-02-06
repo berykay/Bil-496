@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  country-state-city:
+    specifier: ^3.2.1
+    version: 3.2.1
   dotenv:
     specifier: ^16.3.1
     version: 16.3.1
@@ -966,6 +969,10 @@ packages:
       parse-json: 5.2.0
       path-type: 4.0.0
       yaml: 1.10.2
+    dev: false
+
+  /country-state-city@3.2.1:
+    resolution: {integrity: sha512-kxbanqMc6izjhc/EHkGPCTabSPZ2G6eG4/97akAYHJUN4stzzFEvQPZoF8oXDQ+10gM/O/yUmISCR1ZVxyb6EA==}
     dev: false
 
   /crypt@0.0.2:
