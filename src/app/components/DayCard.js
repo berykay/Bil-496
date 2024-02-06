@@ -10,11 +10,11 @@ export default function DayCard({ dayIndex,isActivated, onClick }) {
       {isActivated ? (
         <div className={styles.activeDayCard}>
           {days[dayIndex]} 
-          <Meal className={styles.meal} mealTitle="Kahvaltı" mealInfo="400Kcal" mealContent="asşldkads" />
-          <Meal className={styles.meal} mealTitle="Kahvaltı" mealInfo="400Kcal" mealContent="asşldkads" />
-          <Meal className={styles.meal} mealTitle="Kahvaltı" mealInfo="400Kcal" mealContent="asşldkads" />
-          <Meal className={styles.meal} mealTitle="Kahvaltı" mealInfo="400Kcal" mealContent="asşldkads" />
-          <Meal className={styles.meal} mealTitle="Kahvaltı" mealInfo="400Kcal" mealContent="asşldkads" />
+          <Meal key={1} className={styles.meal} mealTitle="Kahvaltı" mealInfo="400Kcal" mealContent="asşldkads" />
+          <Meal key={2} className={styles.meal} mealTitle="Kahvaltı" mealInfo="400Kcal" mealContent="asşldkads" />
+          <Meal key={3} className={styles.meal} mealTitle="Kahvaltı" mealInfo="400Kcal" mealContent="asşldkads" />
+          <Meal key={4} className={styles.meal} mealTitle="Kahvaltı" mealInfo="400Kcal" mealContent="asşldkads" />
+          <Meal key={5} className={styles.meal} mealTitle="Kahvaltı" mealInfo="400Kcal" mealContent="asşldkads" />
           
           </div>
       ) : (
