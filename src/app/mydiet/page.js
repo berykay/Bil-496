@@ -2,7 +2,7 @@
 import React from 'react'
 import Mylayout from '../mylayout'
 import styles from './page.module.css'
-import DayCard from '../components/DayCard'
+import DayCard from './components/DayCard'
 import { useState } from 'react'
 
 export default function page() {

@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect } from "react";
 import styles from "./Header.module.css";
-import SignInModal from "./SignInModal";
+import SignInModal from "./SignInModal/SignInModal";
 import HeaderComponent from "./HeaderComponent";
 import Cookies from "js-cookie";
-import SignInForm from "./SignInForm";
+import SignInForm from "./SignInForm/SignInForm";
 
 export const Header = ({
   setIsLoggedIn,

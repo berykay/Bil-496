@@ -1,7 +1,7 @@
 import Link from "next/link";
-import styles from "./MenuButon.module.css";
+import styles from "./MenuButton.module.css";
 
-export default function MenuButon(props) {
+export default function MenuButton(props) {
     return ( 
     <div className={styles.menu}>
       <Link className={styles.tarifler} href="/">

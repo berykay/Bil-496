@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./SignInModal.module.css";
-import { signIn, signInWithGoogle, signUp } from "../../services/authService";
+import { signIn, signInWithGoogle, signUp } from "../../../services/authService";
 
 const SignInModal = ({setIsLoggedIn, isLoggedIn, setIsFirstLogin, isFirstLogin}) => {
   const [isSignUp, setIsSignUp] = useState(false);

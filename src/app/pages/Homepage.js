@@ -3,7 +3,7 @@ import Xintake from "../components/Xintake";
 import styles from "./Homepage.module.css";
 import balancedDietImg from "../../images/balanced_diet.jpg";
 import Image from "next/image";
-import MenuButon from "../components/MenuButon";
+import MenuButton from "../components/MenuButton";
 
 export default function Homepage() {
   
@@ -19,9 +19,9 @@ export default function Homepage() {
         <div className={styles.textOverImage}>Greetings, Berkay</div>
       </div>
       <div style={{display:"flex", justifyContent:"space-around"}}>
-      <MenuButon className={styles.menuButon} />
-      <MenuButon className={styles.menuButon} />
-      <MenuButon className={styles.menuButon} />
+      <MenuButton className={styles.menuButon} />
+      <MenuButton className={styles.menuButon} />
+      <MenuButton className={styles.menuButon} />
       </div>
       <div className={styles.intakes}>
         <Xintake name={"protein"} qty={"60"} min={"0"} max={"350"} />
