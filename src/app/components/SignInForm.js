@@ -1,22 +1,28 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import styles from "./SignInForm.module.css";
+import {
+  GetCountries,
+  GetState,
+  GetCity,
+  //async functions
+} from "react-country-state-city";
 
 export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
+  const [countriesList, setCountriesList] = useState([]);
+  const [stateList, setStateList] = useState([]);
+  const [citiesList, setCitiesList] = useState([]);
+
+  const [countryId, setCountryId] = useState(null);
+  const [stateId, setStateId] = useState(null);
+  const [cityId, setCityId] = useState(null);
+
   useEffect(() => {
-    fetch(
-      "https://valid.layercode.workers.dev/list/countries?format=select&flags=true&value=code"
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setCountries(data.countries);
-        setSelectedCountry(data.userSelectValue);
-      });
+    GetCountries().then((result) => {
+      setCountriesList(result);
+    });
   }, []);
 
-  const [goal, setGoal] = useState("");
-  const [countries, setCountries] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState({});
   const [formData, setFormData] = useState({
     fullName: "",
     gender: "",
@@ -31,8 +37,7 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { fullName, gender, age, height, weight, goal, dietPreference } =
-      formData;
+    const {fullName,gender,age,height,weight,goal,dietPreference,allergies,region,} = formData;
     if (
       fullName &&
       gender &&
@@ -64,7 +69,6 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
   };
   return (
     <div className={styles.getStartedForm}>
-      {console.log(formData)}
       <h1>Please fill in the informations below to get started!</h1>
       <form className={styles.form} onSubmit={handleSubmit}>
         <label htmlFor="fullName" className={styles.entryLabel}>
@@ -149,8 +153,8 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
             id="goal"
             name="goal"
             onBlur={handleChange}
-            value={goal}
-            onChange={(e) => setGoal(e.target.value)}
+            value={formData.goal}
+            onChange={handleChange}
           >
             <option value="">Select Goal</option>
             <option value="Gain Muscle">Gain Muscle</option>
@@ -158,7 +162,7 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
             <option value="Maintain Weight">Maintain Weight</option>
             <option value="Other">Other</option>
           </select>
-          {goal === "Other" && (
+          {formData.goal === "Other" && (
             <input
               type="text"
               id="otherGoal"
@@ -216,24 +220,78 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
             onChange={handleChange}
           />
         </label>
-        <label htmlFor="region" className={styles.entryLabel}>
-          Region :
-          <select id="region" name="region" onBlur={handleChange}>
-            <option value="">Select Region</option>
-            {countries.map((country) => (
-              <option key={country.value} value={country.label}>
-                {country.label}
+        <label htmlFor="country" className={styles.entryLabel}>
+          Country :
+          <select
+            id="region"
+            name="region"
+            onBlur={handleChange}
+            onChange={(e) => {
+              handleChange;
+              setCountryId(countriesList[e.target.value].id);
+              setCitiesList([]);
+              GetState(countriesList[e.target.value].id).then((result) => {
+                setStateList(result);
+              });
+            }}
+          >
+            {countriesList.map((item, index) => (
+              <option key={index} value={index}>
+                {item.name}
               </option>
             ))}
           </select>
         </label>
+
+        <label htmlFor="state" className={styles.entryLabel}>
+          State/City :
+          <select
+            onChange={(e) => {
+              handleChange;
+              setStateId(stateList[e.target.value].id);
+              GetCity(countryId,stateList[e.target.value].id).then((result) => {
+                console.log(result);
+                setCitiesList(result);
+              });
+            }}
+            name="state"
+          >
+            {stateList.map((item, index) => (
+              <option key={index} value={index}>
+                {item.name}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label htmlFor="city" className={styles.entryLabel}>
+          City/Street :
+          <select
+            onChange={(e) => {
+              handleChange;
+            }}
+            name="state"
+          >
+           {citiesList.map((item, index) => (
+              <option key={index} value={index}>
+                {item.name}
+              </option>
+            ))}
+          </select>
+        </label>
+
         {isFirstLogin ? (
           <>
-            <button className={styles.submitBtn} type="submit">Save and Continue</button>
+            <button className={styles.submitBtn} type="submit">
+              Save and Continue
+            </button>
             <button onClick={() => setIsFirstLogin(false)}>Skip</button>
           </>
         ) : (
-          <button className={styles.submitBtn} type="submit"> Save  </button>
+          <button className={styles.submitBtn} type="submit">
+            {" "}
+            Save{" "}
+          </button>
         )}
       </form>
     </div>
