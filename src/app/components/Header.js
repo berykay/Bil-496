@@ -6,6 +6,7 @@ import HeaderComponent from "./HeaderComponent";
 import Cookies from "js-cookie";
 import SignInForm from "./SignInForm/SignInForm";
 
+
 export const Header = ({
   setIsLoggedIn,
   isLoggedIn,
@@ -13,10 +14,16 @@ export const Header = ({
   isFirstLogin,
 }) => {
   useEffect(() => {
-    const userCookie = Cookies.get("user");
-    const user = userCookie ? JSON.parse(userCookie) : null;
+    let userCookie = Cookies.get("user");
+    let user = null;
 
-    if (user) {
+    try {
+      user = userCookie ? JSON.parse(userCookie) : null;
+    } catch (error) {
+      console.error("Invalid JSON format:", error);
+    }
+
+    if (userCookie && user) {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
@@ -33,7 +40,6 @@ export const Header = ({
                 setIsFirstLogin={setIsFirstLogin}
                 isFirstLogin={isFirstLogin}
               />
-              {console.log("Logged In")}
             </>
           ) : (
             <>
@@ -42,7 +48,6 @@ export const Header = ({
                 setIsLoggedIn={setIsLoggedIn}
                 isLoggedIn={isLoggedIn}
               />
-              {console.log("Logged In")}
             </>
           )}
         </>
@@ -54,7 +59,6 @@ export const Header = ({
             setIsFirstLogin={setIsFirstLogin}
             isFirstLogin={isFirstLogin}
           />
-          {console.log("Not Logged In")}
         </>
       )}
     </>

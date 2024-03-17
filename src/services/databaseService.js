@@ -1,44 +1,59 @@
-import { getCurrentUserId } from './authService.js';
+import Cookies from "js-cookie";
+import { getCurrentUserId } from "./authService.js";
 
 let userInfo = null;
 
 const getUserInfo = async () => {
   if (!userInfo) {
-    console.log('User information not found. Fetching...');
+    console.log("User information not found. Fetching...");
     userInfo = await fetchUserInfo();
   }
   return userInfo;
 };
 
-const getIsNewUser = async () => {
-  if (!userInfo) {
-    console.error('User information not found.');
-    userInfo = await fetchUserInfo();
+const fetchUserInfo = async () => {
+  console.log("Fetching user information...");
+  const userCookie = Cookies.get("user");
+  if (!userCookie) {
+    return;
   }
-  return userInfo.then((response ) => response .json()).then((data ) => data );
+
+  let userId = getCurrentUserId();
+  while (!userId) {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    userId = getCurrentUserId();
+  }
+
+  try {
+    const response = await fetch(`/api/user?userID=${userId}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const userInfo = await response.json();
+    console.log("User information retrieved:", userInfo);
+    return userInfo;
+  } catch (error) {
+    console.error("Failed to fetch user information:", error);
+  }
 };
 
-const fetchUserInfo = async () => {
-    console.log('Fetching user information...');
-    const userId = getCurrentUserId();
-    if (!userId) {
-      console.error('No user is currently signed in.');
-      return;
-    }
-  
-    try {
-      const response = await fetch(`/api/user?userID=${userId}`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const userInfo = await response.json();
-      console.log('User information retrieved:', userInfo);
-      return userInfo;
-    } catch (error) {
-      console.error('Failed to fetch user information:', error);
-    }
-  };
+const updateUserInfo = async (formData) => {
+  const userID = getCurrentUserId();
+  if (!userID) {
+    throw new Error("No user is currently signed in.");
+  }
+  try{
+    const response = await fetch(`/api/user?userID=${userID}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+  } catch (error) {
+    console.error("Failed to update user information:", error);
+    throw new Error("Failed to update user information");
+  }
+};
 
-
-
-export { getUserInfo, getIsNewUser };
+export { getUserInfo, updateUserInfo };

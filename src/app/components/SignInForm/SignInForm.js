@@ -7,67 +7,124 @@ import {
   GetCity,
   //async functions
 } from "react-country-state-city";
+import { getUserInfo } from "@/services/databaseService";
+import { updateUserInfo } from "@/services/databaseService";
 
 export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
+  const [loading, setLoading] = useState(true);
+  const [formData, setFormData] = useState({
+    fullName: null,
+    gender: null,
+    age: null,
+    height: null,
+    weight: null,
+    goal: null,
+    activityLevel: null,
+    dietPreference: null,
+    allergies: null,
+    country: null,
+    state: null,
+    otherGoal: null,
+  });
+  
   const [countriesList, setCountriesList] = useState([]);
   const [stateList, setStateList] = useState([]);
   const [citiesList, setCitiesList] = useState([]);
 
   const [countryId, setCountryId] = useState(null);
   const [stateId, setStateId] = useState(null);
-  const [cityId, setCityId] = useState(null);
+  // const [cityId, setCityId] = useState(null);
 
   useEffect(() => {
-    GetCountries().then((result) => {
-      setCountriesList(result);
-    });
+    const fetchData = async () => {
+      const countries = await GetCountries();
+      setCountriesList(countries);
+
+      const userInfo = await getUserInfo();
+      if (userInfo) {
+        console.log(userInfo.Age);
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          fullName: userInfo.FullName,
+          gender: userInfo.Gender,
+          age: userInfo.Age,
+          height: userInfo.Height,
+          weight: userInfo.Weight,
+          goal: userInfo.Goal,
+          activityLevel: userInfo.ActivityLevel,
+          dietPreference: userInfo.DietPreference,
+          allergies: userInfo.Allergies,
+          country: userInfo.Country,
+          state: userInfo.State,
+          otherGoal: userInfo.OtherGoal,
+        }));
+      }
+      console.log(formData);
+      setLoading(false);
+    };
+
+    fetchData();
   }, []);
 
-  const [formData, setFormData] = useState({
-    fullName: "",
-    gender: "",
-    age: null,
-    height: null,
-    weight: null,
-    goal: "",
-    dietPreference: "",
-    allergies: "",
-    region: "",
-  });
 
-  const handleSubmit = (e) => {
+
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const {fullName,gender,age,height,weight,goal,dietPreference,allergies,region,} = formData;
-    if (
-      fullName &&
-      gender &&
-      age &&
-      height &&
-      weight &&
-      goal &&
-      dietPreference &&
-      allergies &&
-      region
-    ) {
+    if (isFirstLogin) {
       setIsFirstLogin(false);
-    } else {
-      alert("All fields are required!");
-      alert(
-        Object.keys(formData)
-          .filter((key) => !formData[key])
-          .join(", ")
-      );
+    }
+    try {
+      await updateUserInfo(formData);
+      console.log("User information updated successfully");
+    } catch (error) {
+      console.error("Failed to update user information:", error);
+      alert("Failed to save user information."); // Display error message to the user
     }
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, id } = e.target;
+    //if type is number then name : Number(value)
+    if (type === "number") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: Number(value),
+      }));
+      return;
+    }
+    if (name === "allergies") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value.split(",").map((item) => item.trim()),
+      }));
+      return;
+    }
+    if (name === "goal" && value === "Other") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+        otherGoal: "",
+      }));
+      return;
+    } else if (name === "goal" && value !== "Other") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+        otherGoal: null,
+      }));
+      return;
+    }
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
     }));
   };
   return (
+    <>
+    {console.log(formData)}
+    {loading ? <div>Loading...</div> :
     <div className={styles.getStartedForm}>
       <h1>Please fill in the informations below to get started!</h1>
       <form className={styles.form} onSubmit={handleSubmit}>
@@ -77,6 +134,7 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
             type="text"
             id="fullName"
             name="fullName"
+            value={formData.fullName || ""}
             autoFocus
             onChange={handleChange}
           />
@@ -85,8 +143,9 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
           Gender :
           <select id="gender" name="gender" onBlur={handleChange}>
             <option value="">Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
+            <option value="Male" selected={formData.gender === "Male"}>Male</option>
+            <option value="Female" selected={formData.gender === "Female"}>Female</option>
+            <option value="Other" selected={formData.gender === "Other"}>Other</option>
           </select>
         </label>
         <label htmlFor="age" className={styles.entryLabel}>
@@ -95,7 +154,8 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
             type="number"
             name="age"
             placeholder="e.g. 20"
-            min="18"
+            min="13"
+            value={formData.age || ""}
             onChange={handleChange}
           />
         </label>
@@ -106,6 +166,7 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
             name="height"
             placeholder="e.g. 150"
             min="0"
+            value={formData.height || ""}
             onChange={handleChange}
           />
           <div className={styles.unitToggle}>
@@ -130,6 +191,7 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
             name="weight"
             placeholder="e.g. 160"
             min="0"
+            value={formData.weight || ""}
             onChange={handleChange}
           />
           <div className={styles.unitToggle}>
@@ -157,24 +219,29 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
             onChange={handleChange}
           >
             <option value="">Select Goal</option>
-            <option value="Gain Muscle">Gain Muscle</option>
-            <option value="Lose Weight">Lose Weight</option>
-            <option value="Maintain Weight">Maintain Weight</option>
-            <option value="Other">Other</option>
+            <option value="Gain Muscle" selected={formData.goal === "Gain Muscle"}>Gain Muscle</option>
+            <option value="Lose Weight" selected={formData.goal === "Lose Weight"}>Lose Weight</option>
+            <option value="Maintain Weight" selected={formData.goal === "Maintain Weight"}>Maintain Weight</option>
+            <option value="Other" selected={formData.goal === "Other"}>Other</option>
           </select>
           {formData.goal === "Other" && (
             <input
               type="text"
               id="otherGoal"
               name="otherGoal"
-              placeholder="Please specify"
+              placeholder={formData.otherGoal || "Please specify"}
               onChange={handleChange}
             />
           )}
         </label>
         <label htmlFor="activityLevel" className={styles.entryLabel}>
           Activity Level :
-          <select id="activityLevel" name="activityLevel" onBlur={handleChange}>
+          <select
+            id="activityLevel"
+            name="activityLevel"
+            onBlur={handleChange}
+            onChange={handleChange}
+          >
             <option value="">Select Activity Level</option>
             <option value="Sedentary">Sedentary</option>
             <option value="Lightly Active">Lightly Active</option>
@@ -190,9 +257,7 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
             name="dietPreference"
             onBlur={handleChange}
             value={formData.dietPreference}
-            onChange={(e) =>
-              setFormData({ ...formData, dietPreference: e.target.value })
-            }
+            onChange={handleChange}
           >
             <option value="">Select Diet Preference</option>
             <option value="Omnivore">Omnivore</option>
@@ -223,11 +288,11 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
         <label htmlFor="country" className={styles.entryLabel}>
           Country :
           <select
-            id="region"
-            name="region"
+            id="country"
+            name="country"
             onBlur={handleChange}
             onChange={(e) => {
-              handleChange;
+              handleChange(e);
               setCountryId(countriesList[e.target.value].id);
               setCitiesList([]);
               GetState(countriesList[e.target.value].id).then((result) => {
@@ -235,6 +300,7 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
               });
             }}
           >
+            <option value="">Select Country</option>
             {countriesList.map((item, index) => (
               <option key={index} value={index}>
                 {item.name}
@@ -242,19 +308,20 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
             ))}
           </select>
         </label>
-
         <label htmlFor="state" className={styles.entryLabel}>
           State/City :
           <select
-            onChange={(e) => {
-              handleChange;
-              setStateId(stateList[e.target.value].id);
-              GetCity(countryId,stateList[e.target.value].id).then((result) => {
-                console.log(result);
-                setCitiesList(result);
-              });
-            }}
             name="state"
+            value={formData.state}
+            onChange={(e) => {
+              handleChange(e);
+              setStateId(stateList[e.target.value].id);
+              GetCity(countryId, stateList[e.target.value].id).then(
+                (result) => {
+                  setCitiesList(result);
+                }
+              );
+            }}
           >
             {stateList.map((item, index) => (
               <option key={index} value={index}>
@@ -263,7 +330,7 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
             ))}
           </select>
         </label>
-
+        {/*
         <label htmlFor="city" className={styles.entryLabel}>
           City/Street :
           <select
@@ -279,6 +346,7 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
             ))}
           </select>
         </label>
+        */}
 
         {isFirstLogin ? (
           <>
@@ -289,11 +357,11 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
           </>
         ) : (
           <button className={styles.submitBtn} type="submit">
-            {" "}
-            Save{" "}
+            Save
           </button>
         )}
       </form>
-    </div>
+    </div>}
+    </>
   );
 }
