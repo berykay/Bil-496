@@ -223,12 +223,11 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
             onBlur={handleChange}
             onChange={handleChange}
           >
-            <option value="">Select Activity Level</option>
-            <option value="Sedentary">Sedentary</option>
-            <option value="Lightly Active">Lightly Active</option>
-            <option value="Moderately Active">Moderately Active</option>
-            <option value="Very Active">Very Active</option>
-            <option value="Extra Active">Extra Active</option>
+            {[ "", "Sedentary", "Lightly Active", "Moderately Active", "Very Active", "Extra Active"].map((item, index) => (
+              <option key={index} value={item} selected={formData.activityLevel === item}>
+                {item || "Select Activity Level"}
+              </option>
+            ))}
           </select>
         </label>
         <label htmlFor="dietPreference" className={styles.entryLabel}>
