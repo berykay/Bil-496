@@ -142,7 +142,7 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
                 {item || "Select Gender"}
               </option>
             ))}
-          </select>
+          </select> 
         </label>
         <label htmlFor="age" className={styles.entryLabel}>
           Age :
@@ -199,11 +199,11 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
             value={formData.goal}
             onChange={handleChange}
           >
-            <option value="">Select Goal</option>
-            <option value="Gain Muscle" selected={formData.goal === "Gain Muscle"}>Gain Muscle</option>
-            <option value="Lose Weight" selected={formData.goal === "Lose Weight"}>Lose Weight</option>
-            <option value="Maintain Weight" selected={formData.goal === "Maintain Weight"}>Maintain Weight</option>
-            <option value="Other" selected={formData.goal === "Other"}>Other</option>
+            {["", "Lose Weight", "Gain Weight", "Maintain Weight", "Other"].map((item, index) => (
+              <option key={index} value={item} selected={formData.goal === item}>
+                {item || "Select Goal"}
+              </option>
+            ))}
           </select>
           {formData.goal === "Other" && (
             <input
