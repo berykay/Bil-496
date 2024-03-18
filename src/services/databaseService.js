@@ -56,4 +56,5 @@ const updateUserInfo = async (formData) => {
   }
 };
 
+
 export { getUserInfo, updateUserInfo };

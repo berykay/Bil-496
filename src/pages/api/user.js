@@ -28,7 +28,14 @@ async function getUser(req, res, userID) {
 
     if (users.length > 0) {
       const user = users[0];
-      return res.status(200).json(user);
+      const goal = await getUserGoal(dbConnection, userID);
+      const allergies = await getUserAllergies(dbConnection, userID);
+      const location = await getUserLocation(dbConnection, userID);
+      user.Goal = goal[0].GoalName;
+      user.Allergies = allergies;
+      user.Country = location[0].Country;
+      user.City = location[0].City;
+      return res.status(200).json(user, goal, allergies, location);
     } else {
       return res.status(404).json({ message: "User not found" });
     }
@@ -135,7 +142,6 @@ async function updateUser(req, res, userID) {
           allergies[i],
         ]);
         allergyId = allergyId.length > 0 ? allergyId[0].AllergenID : [];
-
         if (allergyId.length === 0) {
           const addNewAllergyIdQuery = ` INSERT INTO Allergen (AllergenName) VALUES (?)`;
           const [result] = await dbConnection.query(addNewAllergyIdQuery, [
@@ -143,11 +149,13 @@ async function updateUser(req, res, userID) {
           ]);
           allergyId = result.insertId;
         }
-        const userAllergyQuery = `INSERT INTO UserAllergy (UserID, AllergenID) VALUES (?, ?)`;
-        const [result] = await dbConnection.query(userAllergyQuery, [
-          userID,
-          allergyId,
-        ]);
+        if (!ownAllergies.includes(allergies[i])) {
+          const userAllergyQuery = `INSERT INTO UserAllergy (UserID, AllergenID) VALUES (?, ?)`;
+          const [result] = await dbConnection.query(userAllergyQuery, [
+            userID,
+            allergyId,
+          ]);
+        }
       }
     }
 
@@ -205,3 +213,34 @@ async function updateUserGoal(otherGoal, goal, dbConnection, userID) {
     const [resultGoal] = await dbConnection.query(userGoalQuery, [userGoal, userID]);
   }
 }
+
+async function getUserGoal(dbConnection, userID) {
+  const userGoalQuery = `SELECT GoalName FROM Goal JOIN User ON User.GoalID = Goal.GoalID WHERE User.UserID = ?`;
+  const [goal] = await dbConnection.query(userGoalQuery, [userID]);
+  if (goal.length > 0) {
+    return goal;
+  }
+  return null;
+}
+
+async function getUserAllergies(dbConnection, userID) {
+  const userAllergiesQuery = `SELECT AllergenName FROM Allergen JOIN UserAllergy ON UserAllergy.AllergenID = Allergen.AllergenID WHERE UserAllergy.UserID = ?`;
+  const [allergies] = await dbConnection.query(userAllergiesQuery, [userID]);
+  if (allergies.length > 0) {
+    return allergies;
+  }
+  return null;
+}
+
+async function getUserLocation(dbConnection, userID) {
+  const userLocationQuery = `SELECT Country, City FROM Region JOIN User ON User.RegionID = Region.RegionID WHERE User.UserID = ?`;
+  const [location] = await dbConnection.query(userLocationQuery, [userID]);
+  if (location.length > 0) {
+    console.log("Location:", location);
+    return location;
+  }
+  return null;
+}
+
+
+

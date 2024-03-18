@@ -28,7 +28,7 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
   
   const [countriesList, setCountriesList] = useState([]);
   const [stateList, setStateList] = useState([]);
-  const [citiesList, setCitiesList] = useState([]);
+  //const [citiesList, setCitiesList] = useState([]);
 
   const [countryId, setCountryId] = useState(null);
   const [stateId, setStateId] = useState(null);
@@ -40,11 +40,12 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
       setCountriesList(countries);
 
       const userInfo = await getUserInfo();
+
       if (userInfo) {
         console.log(userInfo.Age);
         setFormData((prevFormData) => ({
           ...prevFormData,
-          fullName: userInfo.FullName,
+          fullName: userInfo.Username,
           gender: userInfo.Gender,
           age: userInfo.Age,
           height: userInfo.Height,
@@ -294,7 +295,7 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
           State/City :
           <select
             name="state"
-            value={formData.state}
+            value={formData.city}
             onChange={(e) => {
               handleChange(e);
               setStateId(stateList[e.target.value].id);
