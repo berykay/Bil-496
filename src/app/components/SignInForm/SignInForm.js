@@ -5,7 +5,6 @@ import {
   GetCountries,
   GetState,
   GetCity,
-  //async functions
 } from "react-country-state-city";
 import { getUserInfo } from "@/services/databaseService";
 import { updateUserInfo } from "@/services/databaseService";
@@ -65,10 +64,6 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
 
     fetchData();
   }, []);
-
-
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -142,6 +137,7 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
         <label htmlFor="gender" className={styles.entryLabel}>
           Gender :
           <select id="gender" name="gender" onBlur={handleChange}>
+            
             <option value="">Select Gender</option>
             <option value="Male" selected={formData.gender === "Male"}>Male</option>
             <option value="Female" selected={formData.gender === "Female"}>Female</option>
@@ -172,15 +168,8 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
           <div className={styles.unitToggle}>
             <fieldset className={styles.radioSwitch}>
               <legend>Height Unit</legend>
-              <input type="radio" name="height" id="ft" />
-              <label htmlFor="ft" className="switchLabel">
-                Feet
-              </label>
-
               <input type="radio" name="height" id="cm" />
-              <label htmlFor="cm" className="switchLabel">
                 Cm
-              </label>
             </fieldset>
           </div>
         </label>
@@ -197,15 +186,7 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
           <div className={styles.unitToggle}>
             <fieldset className={styles.radioSwitch}>
               <legend>Height Unit</legend>
-              <input type="radio" name="weight" id="lbs" />
-              <label htmlFor="lbs" className="switchLabel">
-                Lbs
-              </label>
-
-              <input type="radio" name="weight" id="kg" />
-              <label htmlFor="kg" className="switchLabel">
                 Kg
-              </label>
             </fieldset>
           </div>
         </label>
