@@ -136,9 +136,9 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
         </label>
         <label htmlFor="gender" className={styles.entryLabel}>
           Gender :
-          <select id="gender" name="gender" onBlur={handleChange}>
+          <select id="gender" name="gender" onBlur={handleChange} value={formData.gender} onChange={handleChange}>
             {["", "Male","Female","Other"].map((item, index) => (
-              <option key={index} value={item} selected={formData.gender === item}>
+              <option key={index} >
                 {item || "Select Gender"}
               </option>
             ))}
@@ -200,7 +200,7 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
             onChange={handleChange}
           >
             {["", "Lose Weight", "Gain Weight", "Maintain Weight", "Other"].map((item, index) => (
-              <option key={index} value={item} selected={formData.goal === item}>
+              <option key={index}>
                 {item || "Select Goal"}
               </option>
             ))}
@@ -222,9 +222,10 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
             name="activityLevel"
             onBlur={handleChange}
             onChange={handleChange}
+            value={formData.activityLevel}
           >
             {[ "", "Sedentary", "Lightly Active", "Moderately Active", "Very Active", "Extra Active"].map((item, index) => (
-              <option key={index} value={item} selected={formData.activityLevel === item}>
+              <option key={index} >
                 {item || "Select Activity Level"}
               </option>
             ))}
@@ -240,7 +241,7 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
             onChange={handleChange}
           >
             {["", "Vegetarian", "Vegan", "Keto", "Paleo", "Other"].map((item, index) => (
-              <option key={index} value={item} selected={formData.dietPreference === item}>
+              <option key={index}>
                 {item || "Select Diet Preference"}
               </option>
             ))}
@@ -271,6 +272,7 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
             id="country"
             name="country"
             onBlur={handleChange}
+            value={formData.country}
             onChange={(e) => {
               handleChange(e);
               setCountryId(countriesList[e.target.value].id);
@@ -280,9 +282,9 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
               });
             }}
           >
-            <option value="">Select Country</option>
+            <option >Select Country</option>
             {countriesList.map((item, index) => (
-              <option key={index} value={index}>
+              <option key={index}>
                 {item.name}
               </option>
             ))}
@@ -304,7 +306,7 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
             }}
           >
             {stateList.map((item, index) => (
-              <option key={index} value={index}>
+              <option key={index} >
                 {item.name}
               </option>
             ))}
