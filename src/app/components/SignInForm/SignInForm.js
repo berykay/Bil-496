@@ -137,11 +137,11 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
         <label htmlFor="gender" className={styles.entryLabel}>
           Gender :
           <select id="gender" name="gender" onBlur={handleChange}>
-            
-            <option value="">Select Gender</option>
-            <option value="Male" selected={formData.gender === "Male"}>Male</option>
-            <option value="Female" selected={formData.gender === "Female"}>Female</option>
-            <option value="Other" selected={formData.gender === "Other"}>Other</option>
+            {["", "Male","Female","Other"].map((item, index) => (
+              <option key={index} value={item} selected={formData.gender === item}>
+                {item || "Select Gender"}
+              </option>
+            ))}
           </select>
         </label>
         <label htmlFor="age" className={styles.entryLabel}>
