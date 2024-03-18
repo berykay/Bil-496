@@ -239,11 +239,11 @@ export default function SignInForm({ setIsFirstLogin, isFirstLogin }) {
             value={formData.dietPreference}
             onChange={handleChange}
           >
-            <option value="">Select Diet Preference</option>
-            <option value="Omnivore">Omnivore</option>
-            <option value="Vegetarian">Vegetarian</option>
-            <option value="Vegan">Vegan</option>
-            <option value="Other">Other</option>
+            {["", "Vegetarian", "Vegan", "Keto", "Paleo", "Other"].map((item, index) => (
+              <option key={index} value={item} selected={formData.dietPreference === item}>
+                {item || "Select Diet Preference"}
+              </option>
+            ))}
           </select>
           {formData.dietPreference === "Other" && (
             <input
