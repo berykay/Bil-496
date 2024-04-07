@@ -7,10 +7,10 @@ export default function MenuButton(props) {
       <Link className={styles.tarifler} href="/">
         <div>
           <span className="material-icons md-48 center margin-card-title">
-            edit_calendar
+            {props.name}
           </span>
         </div>
-        <p className="center">Make My Diet Plan</p>
+        <p className="center">{props.target}</p>
       </Link>
     </div>
     );
