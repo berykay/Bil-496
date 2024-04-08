@@ -8,3 +8,19 @@
     margin-top: 30px;
     margin-bottom: 20px;
 }
+
+
+
+.button{
+    margin-left: 10px;
+}
+
+.button:hover{
+    background-color: #f0f0f0;
+    color: black;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.6);
+}
+
+.button:active{
+    transform: scale(0.95);
+}

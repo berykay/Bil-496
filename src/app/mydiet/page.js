@@ -5,9 +5,11 @@ import styles from './page.module.css'
 import DayCard from './components/DayCard'
 import { useState } from 'react'
 import OpenAI from "openai";
+import Xintake from "../components/Xintake";
 
 
 export default function page() {
+    const [isLoading, setIsLoading] = useState(false);
     const today = new Date().getDay();
     const [activeDay, setActiveDay] = useState(today-1);
     const [dietPlan, setDietPlan] = useState({
@@ -18,7 +20,8 @@ export default function page() {
             cal: 300,
             protein: 10,
             carb: 50,
-            fat: 5
+            fat: 5,
+            explanation: "Oatmeal is a healthy breakfast option that is high in fiber and protein. It is a great way to start your day and keep you full until lunchtime."
           },
           lunch: {
             meal: "Chicken Salad",
@@ -245,37 +248,81 @@ export default function page() {
   
     const handleGPT = async (e) => {
       e.preventDefault();
+      setIsLoading(true); 
       console.log("GPT button clicked");
       try {
         const completion = await openai.chat.completions.create({
           model: "gpt-3.5-turbo",
           messages: [
-            { role: "user", content: "Bana json formatında haftalık bir diyet programı oluştur. Oluşturacağın bu json şunları içermeli: day{meals{breakfast{meal,cal,protein,carb,fat},lunch{same},dinner{same},extra{same}}}" },
+            { role: "user", content: "Bana json formatında 7 günlük bir diyet programı oluştur. Oluşturacağın bu json şunları içermeli ve tamamen ingilzce olmalı: dayX{meals{breakfast{meal,cal,protein,carb,fat,explanation(shortly describe the meal)},lunch{same},dinner{same},extra{same}}}" },
           ],
         });
+        console.log("coming")
+        setDietPlan(JSON.parse(completion.choices[0].message.content));
         console.log(completion.choices[0].message.content);
       } catch (error) {
         console.error('Error fetching data:', error);
         setGeneratedText("An error occurred, please try again.");
       }
-      
+      setIsLoading(false); // End loading
     };
 
+  const calculateMaxNutrient = (nutrient) => {
+    return Object.values(dietPlan).reduce((acc, day) => {
+      const { breakfast, lunch, dinner, extra } = day.meals;
+      const nutrientSum = breakfast[nutrient] + lunch[nutrient] + dinner[nutrient] + extra[nutrient];
+      return acc + nutrientSum;
+    }, 0);
+  };
+
+  const maxProtein = calculateMaxNutrient('protein');
+  const maxCarbs = calculateMaxNutrient('carb');
+  const maxFat = calculateMaxNutrient('fat');
+  const maxCals = calculateMaxNutrient('cal');
+
+  const sumNutrients = (day, nutrient) => {
+    let sum = 0;
+    for (let i = 1; i <= day; i++) {
+      sum += dietPlan[`day${i}`]?.meals?.breakfast?.[nutrient] + dietPlan[`day${i}`]?.meals?.lunch?.[nutrient] + dietPlan[`day${i}`]?.meals?.dinner?.[nutrient] + dietPlan[`day${i}`]?.meals?.extra?.[nutrient];
+    }
+    return sum;
+  };
+
+  const sumCarbs = (day) => sumNutrients(day, 'carb');
+  const sumProtein = (day) => sumNutrients(day, 'protein');
+  const sumFat = (day) => sumNutrients(day, 'fat');
+  const sumCals = (day) => sumNutrients(day, 'cal');
   return (
     <Mylayout>
-      <button className={styles.button} onClick={handleGPT} >Haftalık Diyet Programını Oluştur</button>
-      <button className={styles.button}>Diyet Programını Kaydet</button>
-        <div className={styles.days}>
-        {[...Array(7)].map((_, index) => (
-        <DayCard 
-          key={index}
-          dayIndex={index}
-          isActivated={index === activeDay}
-          onClick={() => setActiveDay(index)}
-          meals={dietPlan[`day${index+1}`]?.meals}
-        />
-      ))}
+      {isLoading && <div>Loading...</div> }
+
+      {!isLoading && 
+      <>
+      <div className={styles.buttons}>
+        <button className={styles.button} onClick={handleGPT}>Create Diet Plan</button>
+        <button className={styles.button}>Save Diet Plan</button>
       </div>
+      <div className={styles.days}>
+        <div className={styles.intakes}>
+          <Xintake name={"PROTEIN"} qty={sumProtein(activeDay+1)} min={"0"} max={maxProtein} />
+          <Xintake name={"CARBS"} qty={sumCarbs(activeDay+1)} min={"0"} max={maxCarbs} />
+        </div>
+        {[...Array(7)].map((_, index) => (
+          <DayCard 
+            key={index}
+            dayIndex={index}
+            isActivated={index === activeDay}
+            onClick={() => setActiveDay(index)}
+            meals={dietPlan[`day${index+1}`]?.meals}
+          />
+        ))}
+        <div className={styles.intakes}>
+          <Xintake name={"FAT"}  qty={sumFat(activeDay+1)} min={"0"} max={maxFat} />
+          <Xintake name={"CALS"} qty={sumCals(activeDay+1)} min={"0"} max={maxCals} />
+        </div>
+      </div>
+      </>
+      }
     </Mylayout>
   )
 }

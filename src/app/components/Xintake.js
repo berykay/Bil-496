@@ -5,7 +5,7 @@ const Xintake = (props) => {
   return (
     <div className={styles.item}>
       <h2 className={styles.h2}>{props.name}</h2>
-      <span className={styles.span}>{props.qty} g</span>
+      <span className={styles.span}>{props.qty} g until now</span>
       <meter
         className={styles.meter}
         min={props.min}
@@ -13,7 +13,7 @@ const Xintake = (props) => {
         value={props.qty}
         id={styles.protein}
       />
-      <span>You need {props.max - props.qty} g more</span>
+      <span>Need {props.max - props.qty}g for weekly goal</span>
     </div>
   );
 };

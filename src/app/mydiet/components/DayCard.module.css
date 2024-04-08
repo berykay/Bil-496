@@ -20,7 +20,7 @@
     box-shadow: 5px 5px 15px rgba(0,0,0,0.6);
   }
 
-  .activeDayCard{
+.activeDayCard{
     display: flex;
     flex-direction: column;
     align-items: center;
