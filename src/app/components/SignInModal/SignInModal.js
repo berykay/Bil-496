@@ -32,8 +32,8 @@ const SignInModal = ({setIsLoggedIn, isLoggedIn, setIsFirstLogin, isFirstLogin})
     e.preventDefault();
     try {
       await signUp(email, password);
-      setIsFirstLogin(true);
       setIsLoggedIn(true);
+      setIsFirstLogin(true);
     } catch (error) {
       console.error("Signup failed:", error.message);
     }

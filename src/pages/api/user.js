@@ -135,6 +135,7 @@ async function updateUser(req, res, userID) {
 
     await updateUserGoal(otherGoal, goal, dbConnection, userID);
 
+    /*
     if (allergies) {
       for (let i = 0; i < allergies.length; i++) {
         const allergyIdQuery = `SELECT AllergenID FROM Allergen WHERE AllergenName = ?`;
@@ -158,6 +159,7 @@ async function updateUser(req, res, userID) {
         }
       }
     }
+    */
 
     const updateQuery = `
       UPDATE User SET

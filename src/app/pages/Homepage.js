@@ -16,19 +16,12 @@ export default function Homepage() {
           src={balancedDietImg}
           alt="Balanced Diet"
         />
-        <div className={styles.textOverImage}>Greetings, Berkay</div>
+        <div className={styles.textOverImage}>Greetings</div>
       </div>
       <div style={{display:"flex", justifyContent:"space-around"}}>
       <MenuButton className={styles.menuButon} name={"Diyet Programı Oluştur"} />
       <MenuButton className={styles.menuButon} name={"  Profili Düzenle"} />
       <MenuButton className={styles.menuButon} name={"Kişisel Yemek Oluştur"} />
-      </div>
-      <div className={styles.intakes}>
-        <Xintake name={"protein"} qty={"60"} min={"0"} max={"350"} />
-        <Xintake name={"protein"} qty={"60"} min={"0"} max={"350"} />
-        <Xintake name={"protein"} qty={"60"} min={"0"} max={"350"} />
-        <Xintake name={"protein"} qty={"60"} min={"0"} max={"350"} />
-        <Xintake name={"protein"} qty={"60"} min={"0"} max={"350"} />
       </div>
     </div>
   );

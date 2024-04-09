@@ -39,6 +39,7 @@ export const Header = ({
               <SignInForm
                 setIsFirstLogin={setIsFirstLogin}
                 isFirstLogin={isFirstLogin}
+                setIsLoggedIn={setIsLoggedIn}
               />
             </>
           ) : (

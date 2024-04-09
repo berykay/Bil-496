@@ -24,7 +24,7 @@ const ChatgptAPI = () => {
       const completion = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages: [
-          { role: "user", content: userInput },
+          { role: "user", content: "Süte alerjim var" + userInput },
         ],
       });
       setGeneratedText(completion.choices[0].message.content);

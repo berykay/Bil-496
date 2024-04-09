@@ -35,7 +35,8 @@ const signUp = async (email, password) => {
       password
     );
     const user = userCredential.user;
-    Cookies.set("user", JSON.stringify(user));
+
+    Cookies.set(`user_${user.uid}`, JSON.stringify(user));
     console.log("Signed up with Firebase", user);
 
     const response = await fetch("http://localhost:3000/api/user", {

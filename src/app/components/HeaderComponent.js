@@ -18,18 +18,13 @@ const HeaderComponent = ({ setIsLoggedIn, isLoggedIn }) => {
         <nav className={styles.nav}>
           <ul className={styles.headerLinks}>
             <li>
-              <Link href="/calendar" className={styles.headerLink}>
-                Calendar
-              </Link>
-            </li>
-            <li>
               <Link href="/mydiet" className={styles.headerLink}>
                 My Diet
               </Link>
             </li>
             <li>
               <Link href="/recipe" className={styles.headerLink}>
-                Recipe
+                Ask me
               </Link>
             </li>
             <li></li>
