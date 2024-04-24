@@ -21,8 +21,8 @@ dependencies:
     specifier: ^3.0.5
     version: 3.0.5
   mysql2:
-    specifier: ^3.9.1
-    version: 3.9.1
+    specifier: ^3.9.7
+    version: 3.9.7
   net:
     specifier: ^1.0.2
     version: 1.0.2
@@ -1300,8 +1300,8 @@ packages:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
     dev: false
 
-  /mysql2@3.9.1:
-    resolution: {integrity: sha512-3njoWAAhGBYy0tWBabqUQcLtczZUxrmmtc2vszQUekg3kTJyZ5/IeLC3Fo04u6y6Iy5Sba7pIIa2P/gs8D3ZeQ==}
+  /mysql2@3.9.7:
+    resolution: {integrity: sha512-KnJT8vYRcNAZv73uf9zpXqNbvBG7DJrs+1nACsjZP1HMJ1TgXEy8wnNilXAn/5i57JizXKtrUtwDB7HxT9DDpw==}
     engines: {node: '>= 8.0'}
     dependencies:
       denque: 2.1.0
